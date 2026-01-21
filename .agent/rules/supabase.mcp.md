@@ -44,25 +44,21 @@ Edge Functions: Since Nuxt and Supabase Edge Functions both use TypeScript, use 
 ## Absolute Rules (Non-Negotiable)
 
 1. **ALL database changes MUST be done via Supabase migrations**
-
-   * This includes:
-
-     * Creating or modifying tables
-     * Adding or altering columns
-     * Creating or changing indexes
-     * Enabling RLS
-     * Creating, modifying, or deleting RLS policies
-     * Any schema or data-structure change
+   - This includes:
+     - Creating or modifying tables
+     - Adding or altering columns
+     - Creating or changing indexes
+     - Enabling RLS
+     - Creating, modifying, or deleting RLS policies
+     - Any schema or data-structure change
 
 2. **NEVER write executable SQL into `supabase-setup.md`**
-
-   * `supabase-setup.md` is **documentation only**
-   * It MUST NOT contain SQL intended for manual execution
+   - `supabase-setup.md` is **documentation only**
+   - It MUST NOT contain SQL intended for manual execution
 
 3. **NEVER ask the user to run SQL manually**
-
-   * All SQL MUST live in migration files
-   * All execution MUST happen via the Supabase MCP
+   - All SQL MUST live in migration files
+   - All execution MUST happen via the Supabase MCP
 
 ---
 
@@ -73,7 +69,6 @@ Edge Functions: Since Nuxt and Supabase Edge Functions both use TypeScript, use 
 ### Step 2: Create a Migration (Required)
 
 For **every** database change, create a new migration:
-
 
 This MUST produce a file at:
 
@@ -92,11 +87,11 @@ All SQL MUST be written inside the generated migration file.
 
 Example responsibilities of a migration:
 
-* Table creation
-* Index creation
-* RLS enablement
-* RLS policy definitions
-* Constraints and relationships
+- Table creation
+- Index creation
+- RLS enablement
+- RLS policy definitions
+- Constraints and relationships
 
 Example (excerpt):
 
@@ -114,24 +109,21 @@ After creating and editing the migration file, **ALWAYS run**:
 
 supabase db push
 
-
 ❌ Never leave migrations unapplied
 ❌ Never assume migrations will be applied later
-
 
 ## Naming Rules (Mandatory)
 
 Migration names MUST follow these patterns:
 
-* `create_<table_name>` – create a new table
-* `add_<column>_to_<table>` – add a column
-* `alter_<table>_<change>` – modify a table
-* `drop_<table_name>` – drop a table
-* `add_<policy>_policy` – add an RLS policy
+- `create_<table_name>` – create a new table
+- `add_<column>_to_<table>` – add a column
+- `alter_<table>_<change>` – modify a table
+- `drop_<table_name>` – drop a table
+- `add_<policy>_policy` – add an RLS policy
 
 ❌ Vague names are not allowed
 ❌ Multiple unrelated changes in one migration are discouraged
-
 
 ## State Validation Rules
 

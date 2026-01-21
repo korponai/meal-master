@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Gemini – Nuxt Project Guidelines
 
 This file defines **mandatory rules** for all code generation and modifications in this Nuxt codebase.
