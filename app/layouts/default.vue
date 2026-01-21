@@ -24,6 +24,11 @@ const localePath = useLocalePath();
             class="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition-colors"
             >{{ $t("home") }}</NuxtLink
           >
+          <NuxtLink
+            :to="localePath('/profile')"
+            class="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition-colors"
+            >{{ $t("profile") }}</NuxtLink
+          >
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-4 items-center">
           <button

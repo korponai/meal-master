@@ -22,3 +22,32 @@ It is intended to be used as **context for AI-assisted development (context engi
 
 ---
 
+### Iteration 1 – Supabase & Authentication
+
+**Status:** Done  
+**Goal:** Integrate Supabase and implement email/password authentication.
+
+**Deliverables:**
+
+- Supabase client configuration
+- Login page (`/login`)
+- User registration and login
+- Forgot password page (`/forgot-password`)
+- Session handling
+- Route protection middleware
+- Logout functionality
+
+### Iteration 2 – User Profile
+
+**Status:** Done
+**Goal:** Implement user profile management (avatar, name, password).
+
+**Deliverables:**
+
+- `profiles` table in Supabase
+- Storage bucket for avatars
+- Profile page (`/profile`) with protected access
+- Avatar upload component
+- Account details editing
+- Password change functionality
+- Menu item update
