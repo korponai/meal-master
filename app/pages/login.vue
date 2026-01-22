@@ -4,12 +4,20 @@ definePageMeta({
 });
 
 const supabase = useSupabaseClient();
-const router = useRouter();
+const user = useSupabaseUser();
+const localePath = useLocalePath();
 
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
 const errorMsg = ref("");
+
+// Redirect if already logged in
+watchEffect(() => {
+  if (user.value) {
+    navigateTo(localePath("/recipes"));
+  }
+});
 
 const handleLogin = async () => {
   isLoading.value = true;
@@ -20,10 +28,9 @@ const handleLogin = async () => {
       password: password.value,
     });
     if (error) throw error;
-    router.push("/recipes");
+    // The watchEffect will handle the redirect once user.value is updated
   } catch (error: any) {
     errorMsg.value = error.message;
-  } finally {
     isLoading.value = false;
   }
 };
