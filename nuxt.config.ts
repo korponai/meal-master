@@ -2,12 +2,28 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
+  runtimeConfig: {
+    public: {
+      supabase: {
+        url: process.env.NUXT_PUBLIC_SUPABASE_URL,
+        key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
+      },
+    },
+  },
   modules: [
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     "@nuxtjs/supabase",
     "@nuxtjs/i18n",
+    "@nuxtjs/google-fonts",
   ],
+  css: ["~/assets/css/main.css"],
+  googleFonts: {
+    families: {
+      Inter: [400, 500, 600, 700],
+    },
+    display: "swap",
+  },
   future: {
     compatibilityVersion: 4,
   },
@@ -20,7 +36,6 @@ export default defineNuxtConfig({
       { code: "hu", name: "Magyar", file: "hu.json" },
       { code: "sr", name: "Srpski", file: "sr.json" },
     ],
-    lazy: true,
     langDir: "../app/locales",
     defaultLocale: "en",
     strategy: "prefix_and_default",

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "auth",
+});
+
 const supabase = useSupabaseClient();
 const router = useRouter();
 
@@ -16,7 +20,7 @@ const handleLogin = async () => {
       password: password.value,
     });
     if (error) throw error;
-    router.push("/");
+    router.push("/recipes");
   } catch (error: any) {
     errorMsg.value = error.message;
   } finally {
@@ -26,62 +30,64 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-100">
-    <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-      <h2 class="mb-6 text-2xl font-bold text-center text-gray-900">Login</h2>
-      <form @submit.prevent="handleLogin" class="space-y-4">
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700"
-            >Email</label
-          >
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            required
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-          />
-        </div>
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700"
-            >Password</label
-          >
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-          />
-        </div>
-        <div class="text-right">
-          <NuxtLink
-            to="/forgot-password"
-            class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-          >
-            Forgot Password?
+  <div>
+    <h2 class="mt-6 text-2xl font-bold text-gray-900 mb-8">Login</h2>
+    <form @submit.prevent="handleLogin" class="space-y-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          required
+          class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-black focus:ring-black sm:text-sm"
+          placeholder="name@example.com"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <input
+          id="password"
+          v-model="password"
+          type="password"
+          required
+          class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-black focus:ring-black sm:text-sm"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <div class="flex items-center justify-end">
+        <NuxtLink to="/forgot-password" class="text-sm font-medium text-black hover:text-gray-800">
+          Forgot Password?
+        </NuxtLink>
+      </div>
+
+      <div v-if="errorMsg" class="text-sm text-red-600">
+        {{ errorMsg }}
+      </div>
+
+      <button
+        type="submit"
+        :disabled="isLoading"
+        class="group relative flex w-full justify-center rounded-xl bg-black py-3.5 px-4 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:bg-gray-400"
+      >
+        <span v-if="isLoading">Loading...</span>
+        <span v-else>Login</span>
+      </button>
+
+      <div class="relative my-8">
+         <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-200"></div>
+         </div>
+      </div>
+
+      <div class="mt-6">
+          <p class="text-lg font-bold text-gray-900 mb-6">Create an Account</p>
+           <NuxtLink to="/register" class="flex w-full justify-center rounded-xl bg-white border border-black py-3.5 px-4 text-sm font-semibold text-black hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2">
+            Create an Account
           </NuxtLink>
-        </div>
-        <div v-if="errorMsg" class="text-sm text-red-600">
-          {{ errorMsg }}
-        </div>
-        <button
-          type="submit"
-          :disabled="isLoading"
-          class="w-full flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
-        >
-          <span v-if="isLoading">Loading...</span>
-          <span v-else>Login</span>
-        </button>
-      </form>
-      <p class="mt-4 text-center text-sm text-gray-600">
-        Don't have an account?
-        <NuxtLink
-          to="/register"
-          class="font-medium text-indigo-600 hover:text-indigo-500"
-          >Register</NuxtLink
-        >
-      </p>
-    </div>
+      </div>
+    </form>
   </div>
 </template>
