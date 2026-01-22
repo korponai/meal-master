@@ -53,5 +53,11 @@
   "recipes_saved": "Mentett receptek",
   "meals_planned": "Tervezett étkezések",
   "support_us": "Támogasson minket",
-  "donate": "Adomány"
+  "donate": "Adomány",
+  "donate_title": "Adományozás",
+  "donate_desc": "Támogassa munkánkat egy kis adománnyal.",
+  "option_beer": "Egy sörre",
+  "option_pizza": "Egy pizzára",
+  "option_massage": "Egy thai masszázsra",
+  "support_us_title": "Támogasson minket"
 }

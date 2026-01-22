@@ -8,6 +8,7 @@ export default defineNuxtConfig({
         url: process.env.NUXT_PUBLIC_SUPABASE_URL,
         key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
       },
+      paypalClientId: process.env.NUXT_PUBLIC_PAYPAL_CLIENT_ID,
     },
   },
   modules: [

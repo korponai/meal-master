@@ -28,6 +28,10 @@ trigger: always_on
 - Keep global styles in `assets/css/` and minimal component-scoped styles.
 - Use CSS variables and tokens for design consistency.
 
+### Internationalization i18n
+
+- Always use i18n internationalisation. The supported languages: English, Hungarian, and Serbian
+
 ### Directory Structure
 
 ├── app/

@@ -53,5 +53,11 @@
   "recipes_saved": "Sačuvanih recepata",
   "meals_planned": "Isplaniranih obroka",
   "support_us": "Podržite nas",
-  "donate": "Donirajte"
+  "donate": "Donirajte",
+  "donate_title": "Donacija",
+  "donate_desc": "Podržite naš rad malom donacijom.",
+  "option_beer": "Za pivo",
+  "option_pizza": "Za picu",
+  "option_massage": "Za tajlandsku masažu",
+  "support_us_title": "Podržite nas"
 }

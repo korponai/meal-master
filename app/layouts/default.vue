@@ -11,6 +11,8 @@ const handleSignOut = async () => {
   await supabase.auth.signOut();
   navigateTo("/login");
 };
+
+const { openDonationModal } = useDonation();
 </script>
 
 <template>
@@ -168,9 +170,16 @@ const handleSignOut = async () => {
           <a href="#" class="hover:text-white">{{ $t("about_us") }}</a>
           <a href="#" class="hover:text-white">{{ $t("contact") }}</a>
           <a href="#" class="hover:text-white">{{ $t("privacy_policy") }}</a>
+          <button
+            @click="openDonationModal"
+            class="hover:text-white font-semibold text-yellow-500"
+          >
+            {{ $t("donate") }}
+          </button>
         </div>
         <span class="mt-4 md:mt-0 text-xs">{{ $t("footer_tagline") }}</span>
       </div>
     </footer>
   </div>
+  <DonationModal />
 </template>

@@ -27,7 +27,9 @@ Always implement the current iteration based on the backlog.
 - Tailwind CSS styling
 - Pinia state management (ready)
 - Zod validation (ready)
+- Donation feature (PayPal integration)
 
 ## Environment Variables
 
 - NUXT_PUBLIC_API_URL (example)
+- NUXT_PUBLIC_PAYPAL_CLIENT_ID (required for donation feature)

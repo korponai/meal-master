@@ -4,6 +4,7 @@ import type { Database } from "~/types/database.types";
 const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 const { t } = useI18n();
+const { openDonationModal } = useDonation();
 
 const loading = ref(false);
 const fullName = ref("");
@@ -138,4 +139,18 @@ async function updateProfile() {
       </button>
     </div>
   </form>
+
+  <div class="mt-10 pt-10 border-t border-gray-200">
+    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">
+      {{ t("support_us_title") }}
+    </h3>
+    <p class="text-sm text-gray-500 mb-4">{{ t("donate_desc") }}</p>
+    <button
+      type="button"
+      @click="openDonationModal"
+      class="inline-flex justify-center rounded-md bg-yellow-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
+    >
+      {{ t("donate") }}
+    </button>
+  </div>
 </template>

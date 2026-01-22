@@ -53,5 +53,11 @@
   "recipes_saved": "Recipes saved",
   "meals_planned": "Meals planned",
   "support_us": "Support us",
-  "donate": "Donate"
+  "donate": "Donate",
+  "donate_title": "Donate",
+  "donate_desc": "Support our work with a small donation.",
+  "option_beer": "Have a beer",
+  "option_pizza": "Eat a pizza",
+  "option_massage": "Go for a Thai massage",
+  "support_us_title": "Support Us"
 }
