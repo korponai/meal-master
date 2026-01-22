@@ -4,6 +4,7 @@ definePageMeta({
 });
 
 const supabase = useSupabaseClient();
+const { t } = useI18n();
 
 const fullName = ref("");
 const email = ref("");
@@ -14,10 +15,10 @@ const errorMsg = ref("");
 
 const handleRegister = async () => {
   if (!isAgreed.value) {
-      errorMsg.value = "You must agree to the Privacy Policy";
-      return;
+    errorMsg.value = t("must_agree_privacy");
+    return;
   }
-  
+
   isLoading.value = true;
   errorMsg.value = "";
   try {
@@ -25,13 +26,13 @@ const handleRegister = async () => {
       email: email.value,
       password: password.value,
       options: {
-          data: {
-              full_name: fullName.value
-          }
-      }
+        data: {
+          full_name: fullName.value,
+        },
+      },
     });
     if (error) throw error;
-    alert("Check your email for the confirmation link!");
+    alert(t("check_email_confirmation"));
   } catch (error: any) {
     errorMsg.value = error.message;
   } finally {
@@ -42,10 +43,16 @@ const handleRegister = async () => {
 
 <template>
   <div>
-    <h2 class="mt-6 text-2xl font-bold text-gray-900 mb-8">Create an Account</h2>
+    <h2 class="mt-6 text-2xl font-bold text-gray-900 mb-8">
+      {{ $t("register_title") }}
+    </h2>
     <form @submit.prevent="handleRegister" class="space-y-6">
       <div>
-        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+        <label
+          for="fullName"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >{{ $t("full_name") }}</label
+        >
         <input
           id="fullName"
           v-model="fullName"
@@ -57,7 +64,11 @@ const handleRegister = async () => {
       </div>
 
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <label
+          for="email"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >{{ $t("email") }}</label
+        >
         <input
           id="email"
           v-model="email"
@@ -69,7 +80,11 @@ const handleRegister = async () => {
       </div>
 
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <label
+          for="password"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >{{ $t("password") }}</label
+        >
         <input
           id="password"
           v-model="password"
@@ -79,7 +94,7 @@ const handleRegister = async () => {
           placeholder="••••••••"
         />
       </div>
-      
+
       <div class="flex items-center">
         <input
           id="terms"
@@ -89,7 +104,10 @@ const handleRegister = async () => {
           class="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
         />
         <label for="terms" class="ml-2 block text-sm text-gray-900">
-          I agree to the <a href="#" class="font-medium text-black hover:underline">Privacy Policy</a>
+          {{ $t("agree_prefix") }}
+          <a href="#" class="font-medium text-black hover:underline">{{
+            $t("privacy_policy")
+          }}</a>
         </label>
       </div>
 
@@ -102,14 +120,14 @@ const handleRegister = async () => {
         :disabled="isLoading"
         class="group relative flex w-full justify-center rounded-xl bg-black py-3.5 px-4 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:bg-gray-400"
       >
-        <span v-if="isLoading">Loading...</span>
-        <span v-else>Register</span>
+        <span v-if="isLoading">{{ $t("loading") }}</span>
+        <span v-else>{{ $t("register_button") }}</span>
       </button>
 
       <p class="mt-4 text-center text-sm text-gray-600">
-        Already have an account?
+        {{ $t("already_have_account") }}
         <NuxtLink to="/login" class="font-medium text-black hover:underline">
-          Login here
+          {{ $t("login_here") }}
         </NuxtLink>
       </p>
     </form>

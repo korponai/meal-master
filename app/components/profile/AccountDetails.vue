@@ -99,7 +99,7 @@ async function updateProfile() {
       <label
         for="email"
         class="block text-sm font-medium leading-6 text-gray-900"
-        >Email</label
+        >{{ t("email") }}</label
       >
       <div class="mt-2">
         <input

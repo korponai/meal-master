@@ -6,6 +6,7 @@ definePageMeta({
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const localePath = useLocalePath();
+const { t } = useI18n();
 
 const email = ref("");
 const password = ref("");
@@ -38,10 +39,16 @@ const handleLogin = async () => {
 
 <template>
   <div>
-    <h2 class="mt-6 text-2xl font-bold text-gray-900 mb-8">Login</h2>
+    <h2 class="mt-6 text-2xl font-bold text-gray-900 mb-8">
+      {{ $t("login_title") }}
+    </h2>
     <form @submit.prevent="handleLogin" class="space-y-6">
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <label
+          for="email"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >{{ $t("email") }}</label
+        >
         <input
           id="email"
           v-model="email"
@@ -53,7 +60,11 @@ const handleLogin = async () => {
       </div>
 
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <label
+          for="password"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >{{ $t("password") }}</label
+        >
         <input
           id="password"
           v-model="password"
@@ -65,8 +76,11 @@ const handleLogin = async () => {
       </div>
 
       <div class="flex items-center justify-end">
-        <NuxtLink to="/forgot-password" class="text-sm font-medium text-black hover:text-gray-800">
-          Forgot Password?
+        <NuxtLink
+          to="/forgot-password"
+          class="text-sm font-medium text-black hover:text-gray-800"
+        >
+          {{ $t("forgot_password") }}
         </NuxtLink>
       </div>
 
@@ -79,21 +93,26 @@ const handleLogin = async () => {
         :disabled="isLoading"
         class="group relative flex w-full justify-center rounded-xl bg-black py-3.5 px-4 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:bg-gray-400"
       >
-        <span v-if="isLoading">Loading...</span>
-        <span v-else>Login</span>
+        <span v-if="isLoading">{{ $t("loading") }}</span>
+        <span v-else>{{ $t("login") }}</span>
       </button>
 
       <div class="relative my-8">
-         <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-         </div>
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-200"></div>
+        </div>
       </div>
 
       <div class="mt-6">
-          <p class="text-lg font-bold text-gray-900 mb-6">Create an Account</p>
-           <NuxtLink to="/register" class="flex w-full justify-center rounded-xl bg-white border border-black py-3.5 px-4 text-sm font-semibold text-black hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2">
-            Create an Account
-          </NuxtLink>
+        <p class="text-lg font-bold text-gray-900 mb-6">
+          {{ $t("create_account") }}
+        </p>
+        <NuxtLink
+          to="/register"
+          class="flex w-full justify-center rounded-xl bg-white border border-black py-3.5 px-4 text-sm font-semibold text-black hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+        >
+          {{ $t("create_account") }}
+        </NuxtLink>
       </div>
     </form>
   </div>
