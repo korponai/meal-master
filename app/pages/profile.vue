@@ -225,9 +225,9 @@ const handleSignOut = async () => {
       <!-- Info -->
       <div class="flex-grow pb-4 text-center md:text-left">
         <h1 class="text-3xl font-bold text-gray-900">
-          {{ profile?.full_name || "User" }}
+          {{ profile?.full_name || $t("default_user_name") }}
         </h1>
-        <p class="text-gray-500">Member</p>
+        <p class="text-gray-500">{{ $t("member_label") }}</p>
       </div>
 
       <!-- Actions -->
@@ -238,7 +238,7 @@ const handleSignOut = async () => {
           @click="startEdit"
           class="bg-black text-white px-6 py-2.5 rounded-full font-semibold hover:bg-gray-800 transition-colors"
         >
-          Edit Profile
+          {{ $t("edit_profile") }}
         </button>
         <button
           @click="openDonationModal"
@@ -250,7 +250,7 @@ const handleSignOut = async () => {
           @click="handleSignOut"
           class="border border-gray-300 px-6 py-2.5 rounded-full font-semibold hover:bg-gray-50 transition-colors"
         >
-          Log Out
+          {{ $t("logout") }}
         </button>
       </div>
     </div>
@@ -261,10 +261,12 @@ const handleSignOut = async () => {
       class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
     >
       <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl">
-        <h3 class="text-xl font-bold mb-6">Edit Profile</h3>
+        <h3 class="text-xl font-bold mb-6">{{ $t("edit_profile") }}</h3>
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">Avatar</label>
+            <label class="block text-sm font-medium mb-1">{{
+              $t("avatar_label")
+            }}</label>
             <div class="flex items-center gap-4">
               <div class="w-16 h-16 rounded-full bg-gray-100 overflow-hidden">
                 <img
@@ -282,11 +284,13 @@ const handleSignOut = async () => {
               />
             </div>
             <p v-if="uploading" class="text-xs text-gray-500 mt-1">
-              Uploading...
+              {{ $t("uploading") }}
             </p>
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1">Full Name</label>
+            <label class="block text-sm font-medium mb-1">{{
+              $t("full_name")
+            }}</label>
             <input
               v-model="editForm.full_name"
               type="text"
@@ -309,14 +313,14 @@ const handleSignOut = async () => {
             @click="isEditing = false"
             class="px-5 py-2.5 border rounded-xl hover:bg-gray-50"
           >
-            Cancel
+            {{ $t("cancel") }}
           </button>
           <button
             @click="saveProfile"
             :disabled="uploading"
             class="px-5 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 disabled:opacity-50"
           >
-            Save
+            {{ $t("save") }}
           </button>
         </div>
       </div>
@@ -326,24 +330,26 @@ const handleSignOut = async () => {
       <!-- Sidebar -->
       <div class="space-y-6">
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h3 class="font-bold text-lg mb-4">Profile Details</h3>
+          <h3 class="font-bold text-lg mb-4">{{ $t("profile_details") }}</h3>
           <div class="space-y-3">
             <p v-if="profile?.bio" class="text-gray-600">{{ profile.bio }}</p>
-            <p v-else class="text-gray-400 italic">No bio available.</p>
+            <p v-else class="text-gray-400 italic">{{ $t("no_bio") }}</p>
           </div>
         </div>
 
         <!-- Food Sensitivities -->
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h3 class="font-bold text-lg mb-4">Food Sensitivities</h3>
+          <h3 class="font-bold text-lg mb-4">
+            {{ $t("food_sensitivities_title") }}
+          </h3>
           <div class="space-y-3">
             <div
               v-for="sensitivity in ALL_SENSITIVITIES"
               :key="sensitivity"
               class="flex items-center justify-between"
             >
-              <span class="text-gray-700 capitalize">{{
-                sensitivity.replace("_", " ")
+              <span class="text-gray-700">{{
+                $t("sensitivity_" + sensitivity)
               }}</span>
               <button
                 @click="toggleSensitivity(sensitivity)"
@@ -374,9 +380,9 @@ const handleSignOut = async () => {
       <div class="md:col-span-2 space-y-6">
         <div class="bg-gray-100 rounded-2xl p-8 text-center text-gray-500">
           <h3 class="text-xl font-bold text-gray-900 mb-2">
-            Recipe Contributions
+            {{ $t("recipe_contributions") }}
           </h3>
-          <p>Activity feed coming soon...</p>
+          <p>{{ $t("activity_feed_placeholder") }}</p>
           <!-- Placeholder for social aspect from mock -->
         </div>
       </div>
