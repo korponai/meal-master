@@ -39,17 +39,7 @@ const editForm = ref({
 });
 const uploading = ref(false);
 
-const ALL_SENSITIVITIES = [
-  "lactose",
-  "gluten",
-  "egg",
-  "peanut",
-  "soy",
-  "fish",
-  "milk_protein",
-  "histamine",
-  "fructose",
-];
+import { ALL_SENSITIVITIES } from "@/utils/constants";
 
 const toggleSensitivity = async (sensitivity: string) => {
   if (!profile.value) return;

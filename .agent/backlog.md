@@ -63,3 +63,15 @@ It is intended to be used as **context for AI-assisted development (context engi
 - Predefined sensitivity types (lactose, gluten, egg, peanut, soy, fish, milk protein, histamine, fructose)
 - Toggle-based UI in Profile page
 - Immediate saving of sensitivity status
+
+### Iteration 4 – Recipe Allergens
+
+**Status:** Done
+**Goal:** Implement allergens management in recipe forms and conflict detection.
+
+**Deliverables:**
+
+- `allergens` column in `recipes` table
+- Allergens toggle selector in `RecipeForm.vue`
+- Visual warning (red toggle) if recipe allergen conflicts with user sensitivity
+- Localization support

@@ -121,5 +121,10 @@
   "sensitivity_fish": "Fish",
   "sensitivity_milk_protein": "Milk Protein",
   "sensitivity_histamine": "Histamine",
-  "sensitivity_fructose": "Fructose"
+  "sensitivity_fructose": "Fructose",
+  "allergens_label": "Allergens",
+  "allergen_warning": "Warning: This recipe contains allergens you are sensitive to!",
+  "placeholder_recipe_title": "e.g. Grandma's Apple Pie",
+  "placeholder_recipe_description": "Describe your recipe...",
+  "placeholder_experience": "Share your experience or tips..."
 }

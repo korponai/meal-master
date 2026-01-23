@@ -151,6 +151,7 @@ export type Database = {
       recipes: {
         Row: {
           category: string | null;
+          allergens: string[] | null;
           created_at: string | null;
           description: string | null;
           experience: string | null;
@@ -164,6 +165,7 @@ export type Database = {
         };
         Insert: {
           category?: string | null;
+          allergens?: string[] | null;
           created_at?: string | null;
           description?: string | null;
           experience?: string | null;
@@ -177,6 +179,7 @@ export type Database = {
         };
         Update: {
           category?: string | null;
+          allergens?: string[] | null;
           created_at?: string | null;
           description?: string | null;
           experience?: string | null;

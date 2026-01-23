@@ -124,5 +124,7 @@
   "sensitivity_fish": "Riba",
   "sensitivity_milk_protein": "Mlečni protein",
   "sensitivity_histamine": "Histamin",
-  "sensitivity_fructose": "Fruktoza"
+  "sensitivity_fructose": "Fruktoza",
+  "allergens_label": "Alergeni",
+  "allergen_warning": "Upozorenje: Ovaj recept sadrži alergene na koje ste osetljivi!"
 }

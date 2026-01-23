@@ -124,5 +124,7 @@
   "sensitivity_fish": "Hal",
   "sensitivity_milk_protein": "Tejfehérje",
   "sensitivity_histamine": "Hisztamin",
-  "sensitivity_fructose": "Fruktóz"
+  "sensitivity_fructose": "Fruktóz",
+  "allergens_label": "Allergének",
+  "allergen_warning": "Figyelem: Ez a recept olyan allergéneket tartalmaz, amelyekre Ön érzékeny!"
 }
