@@ -4,206 +4,209 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
+  | Json[];
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
-  }
+    PostgrestVersion: "14.1";
+  };
   public: {
     Tables: {
       ingredients: {
         Row: {
-          created_at: string | null
-          id: string
-          name: string
-        }
+          created_at: string | null;
+          id: string;
+          name: string;
+        };
         Insert: {
-          created_at?: string | null
-          id?: string
-          name: string
-        }
+          created_at?: string | null;
+          id?: string;
+          name: string;
+        };
         Update: {
-          created_at?: string | null
-          id?: string
-          name?: string
-        }
-        Relationships: []
-      }
+          created_at?: string | null;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
       meal_plans: {
         Row: {
-          created_at: string | null
-          custom_name: string | null
-          date: string
-          id: string
-          meal_type: string | null
-          recipe_id: string | null
-          user_id: string
-        }
+          created_at: string | null;
+          custom_name: string | null;
+          date: string;
+          id: string;
+          meal_type: string | null;
+          recipe_id: string | null;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string | null
-          custom_name?: string | null
-          date: string
-          id?: string
-          meal_type?: string | null
-          recipe_id?: string | null
-          user_id: string
-        }
+          created_at?: string | null;
+          custom_name?: string | null;
+          date: string;
+          id?: string;
+          meal_type?: string | null;
+          recipe_id?: string | null;
+          user_id: string;
+        };
         Update: {
-          created_at?: string | null
-          custom_name?: string | null
-          date?: string
-          id?: string
-          meal_type?: string | null
-          recipe_id?: string | null
-          user_id?: string
-        }
+          created_at?: string | null;
+          custom_name?: string | null;
+          date?: string;
+          id?: string;
+          meal_type?: string | null;
+          recipe_id?: string | null;
+          user_id?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "meal_plans_recipe_id_fkey"
-            columns: ["recipe_id"]
-            isOneToOne: false
-            referencedRelation: "recipes"
-            referencedColumns: ["id"]
+            foreignKeyName: "meal_plans_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       profiles: {
         Row: {
-          avatar_url: string | null
-          banner_url: string | null
-          bio: string | null
-          full_name: string | null
-          id: string
-          updated_at: string | null
-          username: string | null
-          website: string | null
-        }
+          avatar_url: string | null;
+          banner_url: string | null;
+          bio: string | null;
+          food_sensitivities: string[] | null;
+          full_name: string | null;
+          id: string;
+          updated_at: string | null;
+          username: string | null;
+          website: string | null;
+        };
         Insert: {
-          avatar_url?: string | null
-          banner_url?: string | null
-          bio?: string | null
-          full_name?: string | null
-          id: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
+          avatar_url?: string | null;
+          banner_url?: string | null;
+          bio?: string | null;
+          food_sensitivities?: string[] | null;
+          full_name?: string | null;
+          id: string;
+          updated_at?: string | null;
+          username?: string | null;
+          website?: string | null;
+        };
         Update: {
-          avatar_url?: string | null
-          banner_url?: string | null
-          bio?: string | null
-          full_name?: string | null
-          id?: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
-        Relationships: []
-      }
+          avatar_url?: string | null;
+          banner_url?: string | null;
+          bio?: string | null;
+          food_sensitivities?: string[] | null;
+          full_name?: string | null;
+          id?: string;
+          updated_at?: string | null;
+          username?: string | null;
+          website?: string | null;
+        };
+        Relationships: [];
+      };
       recipe_ingredients: {
         Row: {
-          created_at: string | null
-          id: string
-          ingredient_id: string
-          quantity: number
-          recipe_id: string
-          unit: string
-        }
+          created_at: string | null;
+          id: string;
+          ingredient_id: string;
+          quantity: number;
+          recipe_id: string;
+          unit: string;
+        };
         Insert: {
-          created_at?: string | null
-          id?: string
-          ingredient_id: string
-          quantity: number
-          recipe_id: string
-          unit: string
-        }
+          created_at?: string | null;
+          id?: string;
+          ingredient_id: string;
+          quantity: number;
+          recipe_id: string;
+          unit: string;
+        };
         Update: {
-          created_at?: string | null
-          id?: string
-          ingredient_id?: string
-          quantity?: number
-          recipe_id?: string
-          unit?: string
-        }
+          created_at?: string | null;
+          id?: string;
+          ingredient_id?: string;
+          quantity?: number;
+          recipe_id?: string;
+          unit?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "recipe_ingredients_ingredient_id_fkey"
-            columns: ["ingredient_id"]
-            isOneToOne: false
-            referencedRelation: "ingredients"
-            referencedColumns: ["id"]
+            foreignKeyName: "recipe_ingredients_ingredient_id_fkey";
+            columns: ["ingredient_id"];
+            isOneToOne: false;
+            referencedRelation: "ingredients";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "recipe_ingredients_recipe_id_fkey"
-            columns: ["recipe_id"]
-            isOneToOne: false
-            referencedRelation: "recipes"
-            referencedColumns: ["id"]
+            foreignKeyName: "recipe_ingredients_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       recipes: {
         Row: {
-          category: string | null
-          created_at: string | null
-          description: string | null
-          experience: string | null
-          id: string
-          image_url: string | null
-          instructions: string | null
-          title: string
-          updated_at: string | null
-          user_id: string
-          visibility: string
-        }
+          category: string | null;
+          created_at: string | null;
+          description: string | null;
+          experience: string | null;
+          id: string;
+          image_url: string | null;
+          instructions: string | null;
+          title: string;
+          updated_at: string | null;
+          user_id: string;
+          visibility: string;
+        };
         Insert: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          experience?: string | null
-          id?: string
-          image_url?: string | null
-          instructions?: string | null
-          title: string
-          updated_at?: string | null
-          user_id?: string
-          visibility?: string
-        }
+          category?: string | null;
+          created_at?: string | null;
+          description?: string | null;
+          experience?: string | null;
+          id?: string;
+          image_url?: string | null;
+          instructions?: string | null;
+          title: string;
+          updated_at?: string | null;
+          user_id?: string;
+          visibility?: string;
+        };
         Update: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          experience?: string | null
-          id?: string
-          image_url?: string | null
-          instructions?: string | null
-          title?: string
-          updated_at?: string | null
-          user_id?: string
-          visibility?: string
-        }
-        Relationships: []
-      }
-    }
+          category?: string | null;
+          created_at?: string | null;
+          description?: string | null;
+          experience?: string | null;
+          id?: string;
+          image_url?: string | null;
+          instructions?: string | null;
+          title?: string;
+          updated_at?: string | null;
+          user_id?: string;
+          visibility?: string;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export type Tables<
   PublicTableNameOrOptions extends
@@ -216,7 +219,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
@@ -224,11 +227,11 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -239,17 +242,17 @@ export type TablesInsert<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -260,17 +263,17 @@ export type TablesUpdate<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -283,14 +286,14 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof PublicSchema["CompositeTypes"]
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
     ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
@@ -298,4 +301,4 @@ export type CompositeTypes<
   ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+    : never;

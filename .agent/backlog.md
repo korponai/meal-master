@@ -51,3 +51,15 @@ It is intended to be used as **context for AI-assisted development (context engi
 - Account details editing
 - Password change functionality
 - Menu item update
+
+### Iteration 3 – Food Sensitivities
+
+**Status:** Done
+**Goal:** Implement food sensitivities management in the user profile.
+
+**Deliverables:**
+
+- `food_sensitivities` column in `profiles` table
+- Predefined sensitivity types (lactose, gluten, egg, peanut, soy, fish, milk protein, histamine, fructose)
+- Toggle-based UI in Profile page
+- Immediate saving of sensitivity status

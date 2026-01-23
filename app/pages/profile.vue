@@ -39,6 +39,52 @@ const editForm = ref({
 });
 const uploading = ref(false);
 
+const ALL_SENSITIVITIES = [
+  "lactose",
+  "gluten",
+  "egg",
+  "peanut",
+  "soy",
+  "fish",
+  "milk_protein",
+  "histamine",
+  "fructose",
+];
+
+const toggleSensitivity = async (sensitivity: string) => {
+  if (!profile.value) return;
+
+  const currentSensitivities = profile.value.food_sensitivities || [];
+  let newSensitivities: string[];
+
+  if (currentSensitivities.includes(sensitivity)) {
+    newSensitivities = currentSensitivities.filter((s) => s !== sensitivity);
+  } else {
+    newSensitivities = [...currentSensitivities, sensitivity];
+  }
+
+  // Optimistic update
+  profile.value = {
+    ...profile.value,
+    food_sensitivities: newSensitivities,
+  };
+
+  try {
+    const userId = user.value?.id || user.value?.sub;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ food_sensitivities: newSensitivities })
+      .eq("id", userId);
+
+    if (error) throw error;
+  } catch (error: any) {
+    console.error("Error updating sensitivities:", error);
+    // Revert optimistic update
+    profile.value.food_sensitivities = currentSensitivities;
+    alert("Failed to update sensitivity status.");
+  }
+};
+
 const startEdit = () => {
   editForm.value = {
     full_name: profile.value?.full_name || "",
@@ -282,8 +328,42 @@ const handleSignOut = async () => {
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <h3 class="font-bold text-lg mb-4">Profile Details</h3>
           <div class="space-y-3">
-            <!-- Bio not supported -->
-            <p class="text-gray-400 italic">No bio available.</p>
+            <p v-if="profile?.bio" class="text-gray-600">{{ profile.bio }}</p>
+            <p v-else class="text-gray-400 italic">No bio available.</p>
+          </div>
+        </div>
+
+        <!-- Food Sensitivities -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+          <h3 class="font-bold text-lg mb-4">Food Sensitivities</h3>
+          <div class="space-y-3">
+            <div
+              v-for="sensitivity in ALL_SENSITIVITIES"
+              :key="sensitivity"
+              class="flex items-center justify-between"
+            >
+              <span class="text-gray-700 capitalize">{{
+                sensitivity.replace("_", " ")
+              }}</span>
+              <button
+                @click="toggleSensitivity(sensitivity)"
+                class="w-12 h-6 rounded-full p-1 transition-colors duration-200 ease-in-out"
+                :class="
+                  profile?.food_sensitivities?.includes(sensitivity)
+                    ? 'bg-green-500'
+                    : 'bg-gray-200'
+                "
+              >
+                <div
+                  class="w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform duration-200 ease-in-out"
+                  :class="
+                    profile?.food_sensitivities?.includes(sensitivity)
+                      ? 'translate-x-6'
+                      : 'translate-x-0'
+                  "
+                ></div>
+              </button>
+            </div>
           </div>
         </div>
 
