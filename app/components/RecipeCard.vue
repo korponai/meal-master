@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   recipe: {
     id: string;
     title: string;
@@ -9,6 +9,13 @@ defineProps<{
 }>();
 
 const emit = defineEmits(["delete"]);
+const router = useRouter();
+
+const navigateToEdit = () => {
+    console.log("Edit clicked for recipe:", props.recipe.id);
+    router.push(`/recipes/${props.recipe.id}/edit`)
+        .catch(err => console.error("Navigation error:", err));
+};
 </script>
 
 <template>
@@ -28,13 +35,16 @@ const emit = defineEmits(["delete"]);
       <h3 class="font-bold text-lg text-gray-900 mb-4">{{ recipe.title }}</h3>
       
       <div class="mt-auto flex items-center justify-between gap-2">
-        <NuxtLink :to="`/recipes/${recipe.id}`" class="px-4 py-1.5 bg-black text-white text-xs font-semibold rounded-full hover:bg-gray-800 transition-colors">
+        <NuxtLink :to="`/recipes/${recipe.id}`" class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-md text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition">
           View
         </NuxtLink>
-        <NuxtLink :to="`/recipes/${recipe.id}/edit`" class="px-4 py-1.5 bg-black text-white text-xs font-semibold rounded-full hover:bg-gray-800 transition-colors">
+        <button 
+          @click.prevent.stop="navigateToEdit"
+          class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-md text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+        >
           Edit
-        </NuxtLink>
-        <button @click="$emit('delete', recipe.id)" class="px-4 py-1.5 bg-black text-white text-xs font-semibold rounded-full hover:bg-gray-800 transition-colors">
+        </button>
+        <button @click="$emit('delete', recipe.id)" class="px-3 py-1 bg-red-50 text-red-600 rounded-md text-xs font-medium hover:bg-red-100 transition">
           Delete
         </button>
       </div>

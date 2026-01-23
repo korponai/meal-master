@@ -1,40 +1,120 @@
 <script setup lang="ts">
+import type { Database } from "@/types/database.types";
+import RecipeForm from "@/components/recipes/RecipeForm.vue";
+
 definePageMeta({
   middleware: "auth",
 });
 
 const route = useRoute();
 const router = useRouter();
-const supabase = useSupabaseClient();
+const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 
 const recipeId = route.params.id as string;
 const isLoading = ref(false);
-const recipe = ref<any>(null);
 
-const { data } = await useAsyncData(`recipe-${recipeId}`, async () => {
-    const { data } = await supabase.from("recipes").select("*").eq("id", recipeId).single();
+const { data: recipe, error: fetchError } = await useAsyncData(`recipe-edit-${recipeId}`, async () => {
+    // Fetch recipe components joined
+    const { data, error } = await supabase
+        .from("recipes")
+        .select("*, recipe_ingredients(*, ingredients(id, name))")
+        .eq("id", recipeId)
+        .single();
+    
+    if (error) throw error;
+    
+    if (user.value && user.value.id) {
+        console.log("Auth Check:", { recipeOwner: data.user_id, currentUser: user.value.id });
+        if (data.user_id !== user.value.id) {
+             throw new Error(`You are not authorized to edit this recipe. Owner: ${data.user_id}, You: ${user.value.id}`);
+        }
+    }
+    
+    console.log("Fetched Recipe Data:", data);
     return data;
 });
 
-if (data.value) {
-    recipe.value = data.value;
+// Redirect on basic error or unauthorized (if caught)
+if (fetchError.value) {
+    console.error("Edit Page Load Error:", fetchError.value);
+    // router.push("/recipes"); // Disable redirect for debugging
 }
 
-const handleSubmit = async (formData: any) => {
-  isLoading.value = true;
-  try {
-    const userId = user.value?.id || user.value?.sub;
-    const { error } = await supabase
-      .from("recipes")
-      .update(formData)
-      .eq("id", recipeId)
-      .eq("user_id", userId);
+const updateImage = async (file: File) => {
+    if (!user.value) throw new Error("User not authenticated");
     
-    if (error) throw error;
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.value.id}/${Date.now()}.${fileExt}`;
+    
+    const { error: uploadError } = await supabase.storage
+        .from('recipe-images')
+        .upload(fileName, file);
+        
+    if (uploadError) throw uploadError;
+    
+    const { data: { publicUrl } } = supabase.storage
+        .from('recipe-images')
+        .getPublicUrl(fileName);
+        
+    return publicUrl;
+}
+
+const handleSubmit = async (payload: { recipe: any, ingredients: any[], imageFile: File | null }) => {
+  if (!user.value) return;
+  isLoading.value = true;
+  
+  try {
+    // 1. Upload new image if present
+    let imageUrl = payload.recipe.image_url; // Keep old image by default
+    if (payload.imageFile) {
+        imageUrl = await updateImage(payload.imageFile);
+    }
+
+    // 2. Update Recipe
+    const { error: updateError } = await supabase
+      .from("recipes")
+      .update({
+        title: payload.recipe.title,
+        description: payload.recipe.description,
+        category: payload.recipe.category,
+        visibility: payload.recipe.visibility,
+        experience: payload.recipe.experience || null,
+        image_url: imageUrl
+      })
+      .eq("id", recipeId);
+      
+    if (updateError) throw updateError;
+
+    // 3. Sync Ingredients
+    // 3.1 Delete existing ingredients
+    const { error: deleteError } = await supabase
+        .from("recipe_ingredients")
+        .delete()
+        .eq("recipe_id", recipeId);
+        
+    if (deleteError) throw deleteError;
+    
+    // 3.2 Insert new list
+    if (payload.ingredients.length > 0) {
+        const ingredientsToInsert = payload.ingredients.map(ing => ({
+            recipe_id: recipeId,
+            ingredient_id: ing.ingredient.id,
+            quantity: ing.quantity,
+            unit: ing.unit
+        }));
+        
+        const { error: insertError } = await supabase
+            .from("recipe_ingredients")
+            .insert(ingredientsToInsert);
+        
+        if (insertError) throw insertError;
+    }
+    
     router.push("/recipes");
   } catch (error: any) {
-    alert(error.message);
+    console.error(error);
+    alert(error.message || "An error occurred while updating the recipe");
   } finally {
     isLoading.value = false;
   }
@@ -42,7 +122,7 @@ const handleSubmit = async (formData: any) => {
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto">
+  <div class="max-w-3xl mx-auto py-10 px-4">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Recipe</h1>
     <div v-if="recipe">
         <RecipeForm :initialData="recipe" :isLoading="isLoading" @submit="handleSubmit" />
