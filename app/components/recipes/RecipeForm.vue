@@ -143,7 +143,7 @@ const onSubmit = () => {
     
     <!-- Image Upload -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium text-gray-700">Recipe Image</label>
+      <label class="block text-sm font-medium text-gray-700">{{ $t('recipe_image_label') }}</label>
       <div class="flex items-center gap-6">
         <div v-if="imagePreview" class="relative w-32 h-32 rounded-xl overflow-hidden border border-gray-200">
             <img :src="imagePreview" class="w-full h-full object-cover" />
@@ -167,57 +167,57 @@ const onSubmit = () => {
     <!-- Basic Info -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       <div class="col-span-2">
-        <label class="block text-sm font-medium text-gray-700">Title</label>
+        <label class="block text-sm font-medium text-gray-700">{{ $t('recipe_title_label') }}</label>
         <input 
             v-model="form.title" 
             type="text" 
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="e.g. Grandma's Apple Pie"
+            :placeholder="$t('placeholder_recipe_title')"
         />
         <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title }}</p>
       </div>
 
       <div class="col-span-2">
-        <label class="block text-sm font-medium text-gray-700">Description</label>
+        <label class="block text-sm font-medium text-gray-700">{{ $t('recipe_description_label') }}</label>
         <textarea 
             v-model="form.description" 
             rows="3" 
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Describe your recipe..."
+            :placeholder="$t('placeholder_recipe_description')"
         ></textarea>
         <p v-if="errors.description" class="mt-1 text-sm text-red-600">{{ errors.description }}</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Category</label>
+        <label class="block text-sm font-medium text-gray-700">{{ $t('recipe_category_label') }}</label>
         <select 
             v-model="form.category" 
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         >
-          <option value="" disabled>Select category</option>
-          <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+          <option value="" disabled>{{ $t('select_category') }}</option>
+          <option v-for="cat in categories" :key="cat" :value="cat">{{ $t('category_' + cat.toLowerCase()) }}</option>
         </select>
         <p v-if="errors.category" class="mt-1 text-sm text-red-600">{{ errors.category }}</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Visibility</label>
+        <label class="block text-sm font-medium text-gray-700">{{ $t('recipe_visibility_label') }}</label>
         <select 
             v-model="form.visibility" 
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         >
-          <option value="public">Public</option>
-          <option value="private">Private</option>
+          <option value="public">{{ $t('visibility_public') }}</option>
+          <option value="private">{{ $t('visibility_private') }}</option>
         </select>
       </div>
       
       <div class="col-span-2">
-        <label class="block text-sm font-medium text-gray-700">Experience / Notes (Optional)</label>
+        <label class="block text-sm font-medium text-gray-700">{{ $t('recipe_experience_label') }}</label>
         <textarea 
             v-model="form.experience" 
             rows="2" 
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Share your experience or tips..."
+            :placeholder="$t('placeholder_experience')"
         ></textarea>
       </div>
     </div>
@@ -225,13 +225,13 @@ const onSubmit = () => {
     <!-- Ingredients -->
     <div class="space-y-4">
         <div class="flex items-center justify-between">
-            <h3 class="text-lg font-medium text-gray-900">Ingredients</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ $t('ingredients_label') }}</h3>
             <button 
                 type="button" 
                 @click="addIngredient"
                 class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
             >
-                + Add Ingredient
+                + {{ $t('add_ingredient') }}
             </button>
         </div>
 
@@ -256,7 +256,7 @@ const onSubmit = () => {
             class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
             <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            {{ isLoading ? 'Saving...' : (initialData ? 'Save Changes' : 'Create Recipe') }}
+            {{ isLoading ? $t('loading') : (initialData ? $t('save_changes') : $t('save_recipe')) }}
         </button>
     </div>
 

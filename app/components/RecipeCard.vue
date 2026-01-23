@@ -36,16 +36,16 @@ const navigateToEdit = () => {
       
       <div class="mt-auto flex items-center justify-between gap-2">
         <NuxtLink :to="`/recipes/${recipe.id}`" class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-md text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-          View
+          {{ $t('view') }}
         </NuxtLink>
         <button 
           @click.prevent.stop="navigateToEdit"
           class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-md text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
-          Edit
+          {{ $t('edit') }}
         </button>
         <button @click="$emit('delete', recipe.id)" class="px-3 py-1 bg-red-50 text-red-600 rounded-md text-xs font-medium hover:bg-red-100 transition">
-          Delete
+          {{ $t('delete') }}
         </button>
       </div>
     </div>

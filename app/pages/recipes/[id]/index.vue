@@ -38,8 +38,8 @@ const handleDelete = async () => {
                  <h1 class="text-4xl font-bold text-gray-900">{{ recipe.title }}</h1>
             </div>
             <div class="flex gap-2">
-                <NuxtLink :to="`/recipes/${recipe.id}/edit`" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50">Edit</NuxtLink>
-                <button @click="handleDelete" class="px-4 py-2 bg-red-50 text-red-600 border border-red-100 rounded-lg text-sm font-medium hover:bg-red-100">Delete</button>
+                <NuxtLink :to="`/recipes/${recipe.id}/edit`" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50">{{ $t('edit') }}</NuxtLink>
+                <button @click="handleDelete" class="px-4 py-2 bg-red-50 text-red-600 border border-red-100 rounded-lg text-sm font-medium hover:bg-red-100">{{ $t('delete') }}</button>
             </div>
         </div>
 
@@ -49,17 +49,17 @@ const handleDelete = async () => {
 
         <div class="grid md:grid-cols-3 gap-12">
             <div class="md:col-span-1">
-                <h3 class="font-bold text-xl mb-4">Ingredients</h3>
+                <h3 class="font-bold text-xl mb-4">{{ $t('ingredients_label') }}</h3>
                 <!-- Placeholder for ingredient list -->
                 <ul class="space-y-2 text-gray-700">
                     <li class="flex items-center gap-2">
                         <div class="w-1.5 h-1.5 bg-black rounded-full"></div>
-                        <span>Ingredients list not structured yet</span>
+                        <span>{{ $t('ingredients_not_structured') }}</span>
                     </li>
                 </ul>
             </div>
              <div class="md:col-span-2">
-                <h3 class="font-bold text-xl mb-4">Instructions</h3>
+                <h3 class="font-bold text-xl mb-4">{{ $t('instructions_label') }}</h3>
                 <div class="prose max-w-none text-gray-700 whitespace-pre-line">
                     {{ recipe.instructions }}
                 </div>

@@ -42,10 +42,18 @@ if (fetchError.value) {
 }
 
 const updateImage = async (file: File) => {
-    if (!user.value) throw new Error("User not authenticated");
+    if (!user.value || !user.value.id) {
+        // Try fetching user again to be sure
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        if (!currentUser || !currentUser.id) throw new Error("User not authenticated properly (missing ID)");
+        user.value = currentUser; // Update the composable state if possible/needed
+    }
+    
+    // safe to access user.value.id (or we use a local var)
+    const userId = user.value!.id;
     
     const fileExt = file.name.split('.').pop();
-    const fileName = `${user.value.id}/${Date.now()}.${fileExt}`;
+    const fileName = `${userId}/${Date.now()}.${fileExt}`;
     
     const { error: uploadError } = await supabase.storage
         .from('recipe-images')
@@ -123,7 +131,7 @@ const handleSubmit = async (payload: { recipe: any, ingredients: any[], imageFil
 
 <template>
   <div class="max-w-3xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Recipe</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ $t('edit_recipe') }}</h1>
     <div v-if="recipe">
         <RecipeForm :initialData="recipe" :isLoading="isLoading" @submit="handleSubmit" />
     </div>

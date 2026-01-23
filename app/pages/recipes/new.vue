@@ -13,10 +13,18 @@ const router = useRouter();
 const isLoading = ref(false);
 
 const uploadImage = async (file: File) => {
-    if (!user.value) throw new Error("User not authenticated");
+    console.log("Upload Image - User Check:", user.value);
+    if (!user.value || !user.value.id) {
+         const { data: { user: currentUser } } = await supabase.auth.getUser();
+         if (!currentUser || !currentUser.id) throw new Error("User not authenticated properly (missing ID)");
+         // update local ref if needed, but definitely use the ID we found
+         var userId = currentUser.id;
+    } else {
+        var userId = user.value.id;
+    }
     
     const fileExt = file.name.split('.').pop();
-    const fileName = `${user.value.id}/${Date.now()}.${fileExt}`;
+    const fileName = `${userId}/${Date.now()}.${fileExt}`;
     
     const { error: uploadError } = await supabase.storage
         .from('recipe-images')
@@ -92,7 +100,7 @@ const handleSubmit = async (payload: { recipe: any, ingredients: any[], imageFil
 
 <template>
   <div class="max-w-3xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Create New Recipe</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ $t('create_recipe') }}</h1>
     <RecipeForm :isLoading="isLoading" @submit="handleSubmit" />
   </div>
 </template>
