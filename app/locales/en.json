@@ -130,5 +130,14 @@
   "no_experience_details": "No experience details shared yet.",
   "loading_recipe": "Loading recipe...",
   "recipe_image_alt": "Recipe image",
-  "ingredient_sugar": "Sugar"
+  "ingredient_sugar": "Sugar",
+  "meal_type_breakfast": "Breakfast",
+  "meal_type_morning_snack": "Morning Snack",
+  "meal_type_lunch": "Lunch",
+  "meal_type_afternoon_snack": "Afternoon Snack",
+  "meal_type_dinner": "Dinner",
+  "meal_type_evening_snack": "Evening Snack",
+  "meal_planner_title": "Weekly Meal Planner",
+  "today": "Today",
+  "add": "Add"
 }

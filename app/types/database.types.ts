@@ -7,10 +7,22 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.1";
+  internal: {
+    Tables: {
+      [key: string]: never;
+    };
+    Views: {
+      [key: string]: never;
+    };
+    Functions: {
+      [key: string]: never;
+    };
+    Enums: {
+      [key: string]: never;
+    };
+    CompositeTypes: {
+      [key: string]: never;
+    };
   };
   public: {
     Tables: {
@@ -106,28 +118,57 @@ export type Database = {
         };
         Relationships: [];
       };
+      recipe_allergens: {
+        Row: {
+          allergen: string;
+          created_at: string | null;
+          id: string;
+          recipe_id: string;
+        };
+        Insert: {
+          allergen: string;
+          created_at?: string | null;
+          id?: string;
+          recipe_id: string;
+        };
+        Update: {
+          allergen?: string;
+          created_at?: string | null;
+          id?: string;
+          recipe_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "recipe_allergens_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       recipe_ingredients: {
         Row: {
+          amount: number;
           created_at: string | null;
           id: string;
           ingredient_id: string;
-          quantity: number;
           recipe_id: string;
           unit: string;
         };
         Insert: {
+          amount: number;
           created_at?: string | null;
           id?: string;
           ingredient_id: string;
-          quantity: number;
           recipe_id: string;
           unit: string;
         };
         Update: {
+          amount?: number;
           created_at?: string | null;
           id?: string;
           ingredient_id?: string;
-          quantity?: number;
           recipe_id?: string;
           unit?: string;
         };
@@ -150,61 +191,58 @@ export type Database = {
       };
       recipes: {
         Row: {
-          category: string | null;
-          allergens: string[] | null;
+          cook_time: number;
           created_at: string | null;
           description: string | null;
-          experience: string | null;
           id: string;
           image_url: string | null;
           instructions: string | null;
+          is_public: boolean | null;
+          prep_time: number;
+          servings: number;
           title: string;
-          updated_at: string | null;
           user_id: string;
-          visibility: string;
         };
         Insert: {
-          category?: string | null;
-          allergens?: string[] | null;
+          cook_time: number;
           created_at?: string | null;
           description?: string | null;
-          experience?: string | null;
           id?: string;
           image_url?: string | null;
           instructions?: string | null;
+          is_public?: boolean | null;
+          prep_time: number;
+          servings: number;
           title: string;
-          updated_at?: string | null;
-          user_id?: string;
-          visibility?: string;
+          user_id: string;
         };
         Update: {
-          category?: string | null;
-          allergens?: string[] | null;
+          cook_time?: number;
           created_at?: string | null;
           description?: string | null;
-          experience?: string | null;
           id?: string;
           image_url?: string | null;
           instructions?: string | null;
+          is_public?: boolean | null;
+          prep_time?: number;
+          servings?: number;
           title?: string;
-          updated_at?: string | null;
           user_id?: string;
-          visibility?: string;
         };
         Relationships: [];
       };
     };
     Views: {
-      [_ in never]: never;
+      [key: string]: never;
     };
     Functions: {
-      [_ in never]: never;
+      [key: string]: never;
     };
     Enums: {
-      [_ in never]: never;
+      [key: string]: never;
     };
     CompositeTypes: {
-      [_ in never]: never;
+      [key: string]: never;
     };
   };
 };

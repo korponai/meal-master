@@ -130,5 +130,14 @@
   "no_experience_details": "Nincs megosztott tapasztalat.",
   "loading_recipe": "Recept betöltése...",
   "recipe_image_alt": "Recept képe",
-  "ingredient_sugar": "Cukor"
+  "ingredient_sugar": "Cukor",
+  "meal_type_breakfast": "Reggeli",
+  "meal_type_morning_snack": "Tízórai",
+  "meal_type_lunch": "Ebéd",
+  "meal_type_afternoon_snack": "Uzsonna",
+  "meal_type_dinner": "Vacsora",
+  "meal_type_evening_snack": "Esti nasi",
+  "meal_planner_title": "Heti Étrend Tervező",
+  "today": "Ma",
+  "add": "Hozzáadás"
 }

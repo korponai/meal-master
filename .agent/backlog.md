@@ -75,3 +75,19 @@ It is intended to be used as **context for AI-assisted development (context engi
 - Allergens toggle selector in `RecipeForm.vue`
 - Visual warning (red toggle) if recipe allergen conflicts with user sensitivity
 - Localization support
+
+### Iteration 5 – Meal Planner / Weekly Calendar
+
+**Status:** Done
+**Goal:** Implement weekly meal planning functionality.
+
+**Deliverables:**
+
+- `meal_plans` table in Supabase
+- Weekly meal plan page (`/meals/weekly-meal-plan`)
+- Weekly calendar view with day columns
+- Meal types: Breakfast, Morning snack, Lunch, Afternoon snack, Dinner, Evening snack
+- Meal management: Add (from recipes), Edit, Delete
+- Week navigation (previous/next/current)
+- TypeScript types (`types/meal-plan.ts`)
+- Menu item update

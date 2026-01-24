@@ -130,5 +130,14 @@
   "no_experience_details": "Nema podeljenih iskustava.",
   "loading_recipe": "Učitavanje recepta...",
   "recipe_image_alt": "Slika recepta",
-  "ingredient_sugar": "Šećer"
+  "ingredient_sugar": "Šećer",
+  "meal_type_breakfast": "Doručak",
+  "meal_type_morning_snack": "Užina",
+  "meal_type_lunch": "Ručak",
+  "meal_type_afternoon_snack": "Užina",
+  "meal_type_dinner": "Večera",
+  "meal_type_evening_snack": "Večernja užina",
+  "meal_planner_title": "Nedeljni Planer Ishrane",
+  "today": "Danas",
+  "add": "Dodaj"
 }

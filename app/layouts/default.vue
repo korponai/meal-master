@@ -45,6 +45,7 @@ const { openDonationModal } = useDonation();
         <!-- Desktop Nav -->
         <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
           <NuxtLink
+            v-if="!user"
             :to="localePath('/')"
             :class="[
               isActive('/') && route.path === '/'

@@ -1,0 +1,154 @@
+<script setup lang="ts">
+import type { Database } from "~/app/types/database.types";
+
+const props = defineProps<{
+  isOpen: boolean;
+  date: string;
+  mealType: string;
+}>();
+
+const emit = defineEmits<{
+  (e: "close"): void;
+  (e: "add", recipeId: string, customName?: string): void;
+}>();
+
+const supabase = useSupabaseClient<Database>();
+const user = useSupabaseUser();
+const searchQuery = ref("");
+const selectedRecipeId = ref<string | null>(null);
+
+const { data: recipes } = await useAsyncData("recipes-list", async () => {
+  if (!user.value) return [];
+  const { data } = await supabase
+    .from("recipes")
+    .select("id, title, image_url")
+    .eq("user_id", user.value.id)
+    .order("title");
+  return data || [];
+});
+
+const filteredRecipes = computed(() => {
+  if (!recipes.value) return [];
+  if (!searchQuery.value) return recipes.value;
+  const lowerQuery = searchQuery.value.toLowerCase();
+  return recipes.value.filter((r) =>
+    r.title.toLowerCase().includes(lowerQuery),
+  );
+});
+
+const handleAdd = () => {
+  if (selectedRecipeId.value) {
+    emit("add", selectedRecipeId.value);
+    selectedRecipeId.value = null;
+    searchQuery.value = "";
+  }
+};
+
+const handleClose = () => {
+  selectedRecipeId.value = null;
+  searchQuery.value = "";
+  emit("close");
+};
+</script>
+
+<template>
+  <div
+    v-if="isOpen"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-black/50 transition-opacity"
+      @click="handleClose"
+    ></div>
+
+    <div
+      class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg flex flex-col max-h-[80vh]"
+    >
+      <!-- Header -->
+      <div
+        class="px-4 py-4 sm:px-6 border-b border-gray-100 flex justify-between items-center"
+      >
+        <h3 class="text-lg font-semibold text-gray-900">Add Meal</h3>
+        <button @click="handleClose" class="text-gray-400 hover:text-gray-500">
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-4 sm:p-6 flex-1 overflow-y-auto">
+        <div class="mb-4">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search recipes..."
+            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <div
+            v-for="recipe in filteredRecipes"
+            :key="recipe.id"
+            @click="selectedRecipeId = recipe.id"
+            :class="[
+              selectedRecipeId === recipe.id
+                ? 'bg-gray-100 ring-2 ring-black'
+                : 'hover:bg-gray-50 border-transparent',
+              'cursor-pointer rounded-lg border p-3 flex items-center gap-3 transition-colors',
+            ]"
+          >
+            <img
+              v-if="recipe.image_url"
+              :src="recipe.image_url"
+              alt=""
+              class="h-10 w-10 rounded object-cover bg-gray-200"
+            />
+            <div
+              v-else
+              class="h-10 w-10 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500"
+            >
+              Img
+            </div>
+            <span class="font-medium text-gray-900">{{ recipe.title }}</span>
+          </div>
+
+          <div
+            v-if="filteredRecipes.length === 0"
+            class="text-center py-8 text-gray-500"
+          >
+            No recipes found.
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+        <button
+          @click="handleAdd"
+          :disabled="!selectedRecipeId"
+          class="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed sm:ml-3 sm:w-auto"
+        >
+          Add Meal
+        </button>
+        <button
+          @click="handleClose"
+          class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
