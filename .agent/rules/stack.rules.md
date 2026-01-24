@@ -79,7 +79,6 @@ trigger: always_on
 
 ## Deployment & Environment
 
-- Use Nitro presets for serverless or edge deployment.
 - Store secrets and keys in `.env` and map them via runtime config.
 - Keep production config separate from development config.
 
@@ -90,5 +89,5 @@ trigger: always_on
 
 ## Documentation
 
-- Keep documentation up to date under `docs/`.
+- Keep documentation up to date under `.agent/`.
 - Use consistent markdown styles and code examples.

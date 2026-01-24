@@ -3,6 +3,7 @@ definePageMeta({
   layout: "landing",
 });
 const { t } = useI18n();
+const { openDonationModal } = useDonation();
 </script>
 
 <template>
@@ -30,11 +31,7 @@ const { t } = useI18n();
             >
               {{ $t("get_started") }}
             </NuxtLink>
-            <button
-              class="border border-black text-black px-8 py-3.5 rounded-xl font-semibold hover:bg-black/5 transition-colors"
-            >
-              {{ $t("request_demo") }}
-            </button>
+            <!-- Request Demo button removed -->
           </div>
         </div>
 
@@ -214,6 +211,7 @@ const { t } = useI18n();
 
       <!-- Card 4: Donate -->
       <div
+        @click="openDonationModal"
         class="bg-gray-200 rounded-[2rem] p-8 flex flex-col justify-between h-48 relative group hover:bg-gray-300 transition-colors cursor-pointer"
       >
         <div class="absolute top-6 right-8">

@@ -2,6 +2,7 @@ export const useDonation = () => {
   const isDonationModalOpen = useState("isDonationModalOpen", () => false);
 
   const openDonationModal = () => {
+    console.log("Opening Donation Modal");
     isDonationModalOpen.value = true;
   };
 

@@ -72,13 +72,17 @@ const renderPayPalButton = async () => {
   }
 };
 
-watch(isDonationModalOpen, (isOpen) => {
-  if (isOpen) {
-    nextTick(() => {
-      renderPayPalButton();
-    });
-  }
-});
+watch(
+  isDonationModalOpen,
+  (isOpen) => {
+    if (isOpen) {
+      nextTick(() => {
+        renderPayPalButton();
+      });
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
