@@ -129,5 +129,6 @@
   "placeholder_experience": "Share your experience or tips...",
   "no_experience_details": "No experience details shared yet.",
   "loading_recipe": "Loading recipe...",
-  "recipe_image_alt": "Recipe image"
+  "recipe_image_alt": "Recipe image",
+  "ingredient_sugar": "Sugar"
 }

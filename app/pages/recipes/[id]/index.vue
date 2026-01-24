@@ -68,6 +68,13 @@ const handleDelete = async () => {
   await supabase.from("recipes").delete().eq("id", recipeId);
   navigateTo("/recipes");
 };
+
+const { t, te } = useI18n();
+const getIngredientName = (name: string) => {
+  if (!name) return "";
+  const key = `ingredient_${name.toLowerCase().replace(/\s+/g, "_")}`;
+  return te(key) ? t(key) : name;
+};
 </script>
 
 <template>
@@ -113,7 +120,11 @@ const handleDelete = async () => {
             <span
               class="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold uppercase tracking-wide"
             >
-              {{ recipe.category }}
+              {{
+                te("category_" + recipe.category.toLowerCase())
+                  ? t("category_" + recipe.category.toLowerCase())
+                  : recipe.category
+              }}
             </span>
             <!-- Allergens -->
             <template v-if="recipe.allergens && recipe.allergens.length">
@@ -129,7 +140,11 @@ const handleDelete = async () => {
                     : 'bg-white text-gray-600 border-gray-200'
                 "
               >
-                {{ allergen }}
+                {{
+                  te("sensitivity_" + allergen.toLowerCase())
+                    ? t("sensitivity_" + allergen.toLowerCase())
+                    : allergen
+                }}
                 <span
                   v-if="
                     matchingAllergens

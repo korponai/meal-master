@@ -129,5 +129,6 @@
   "allergen_warning": "Upozorenje: Ovaj recept sadrži alergene na koje ste osetljivi!",
   "no_experience_details": "Nema podeljenih iskustava.",
   "loading_recipe": "Učitavanje recepta...",
-  "recipe_image_alt": "Slika recepta"
+  "recipe_image_alt": "Slika recepta",
+  "ingredient_sugar": "Šećer"
 }
