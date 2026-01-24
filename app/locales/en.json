@@ -126,5 +126,8 @@
   "allergen_warning": "Warning: This recipe contains allergens you are sensitive to!",
   "placeholder_recipe_title": "e.g. Grandma's Apple Pie",
   "placeholder_recipe_description": "Describe your recipe...",
-  "placeholder_experience": "Share your experience or tips..."
+  "placeholder_experience": "Share your experience or tips...",
+  "no_experience_details": "No experience details shared yet.",
+  "loading_recipe": "Loading recipe...",
+  "recipe_image_alt": "Recipe image"
 }

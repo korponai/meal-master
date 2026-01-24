@@ -126,5 +126,8 @@
   "sensitivity_histamine": "Hisztamin",
   "sensitivity_fructose": "Fruktóz",
   "allergens_label": "Allergének",
-  "allergen_warning": "Figyelem: Ez a recept olyan allergéneket tartalmaz, amelyekre Ön érzékeny!"
+  "allergen_warning": "Figyelem: Ez a recept olyan allergéneket tartalmaz, amelyekre Ön érzékeny!",
+  "no_experience_details": "Nincs megosztott tapasztalat.",
+  "loading_recipe": "Recept betöltése...",
+  "recipe_image_alt": "Recept képe"
 }
