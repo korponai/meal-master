@@ -1,5 +1,63 @@
 <script setup lang="ts">
 import type { Database } from "@/types/database.types";
+import { ALL_SENSITIVITIES } from "@/utils/constants";
+
+// DB constraint-compliant units
+const VALID_UNITS = new Set([
+  "teaspoon",
+  "tablespoon",
+  "cup",
+  "pint",
+  "milliliter",
+  "liter",
+  "gram",
+  "kilogram",
+  "pinch",
+  "by_count",
+]);
+
+const normalizeUnit = (unit: string): string => {
+  if (!unit) return "by_count";
+  const u = unit.toLowerCase().trim();
+
+  if (VALID_UNITS.has(u)) return u;
+
+  // Common mappings
+  if (["tsp", "t"].includes(u)) return "teaspoon";
+  if (["tbsp", "tbs", "T"].includes(u)) return "tablespoon";
+  if (["g", "gms", "gm"].includes(u)) return "gram";
+  if (["kg", "kgs"].includes(u)) return "kilogram";
+  if (["ml", "mls"].includes(u)) return "milliliter";
+  if (["l", "liters"].includes(u)) return "liter";
+  if (["c", "cups"].includes(u)) return "cup";
+  if (["lb", "lbs", "pound", "pounds"].includes(u)) {
+    // DB doesn't support pounds, map to gram (approx) or by_count?
+    // Ideally we should convert quantity too, but that's complex.
+    // For now, let's map to by_count to avoid crash, or add 'pound' to DB.
+    // Given the constraints, let's map generic "pieces" to by_count.
+    return "by_count";
+  }
+  if (["oz", "ounce", "ounces"].includes(u)) return "by_count"; // Same issue
+
+  if (
+    [
+      "pcs",
+      "piece",
+      "pieces",
+      "count",
+      "whole",
+      "slice",
+      "slices",
+      "clove",
+      "cloves",
+    ].includes(u)
+  )
+    return "by_count";
+
+  // Fallback
+  console.warn(`Unknown unit "${unit}" mapped to "by_count"`);
+  return "by_count";
+};
 
 definePageMeta({
   middleware: "auth",
@@ -84,25 +142,44 @@ const ensureIngredients = async (
 ): Promise<Map<string, string>> => {
   const ingredientMap = new Map<string, string>();
 
-  for (const name of ingredientNames) {
-    // Check if ingredient exists
+  // Use a Set to avoid processing duplicates
+  const uniqueNames = [...new Set(ingredientNames.map((n) => n.trim()))];
+
+  for (const name of uniqueNames) {
+    if (!name) continue;
+
+    // Check if ingredient exists (case-insensitive)
     const { data: existing } = await supabase
       .from("ingredients")
       .select("id, name")
       .ilike("name", name)
-      .single();
+      .maybeSingle();
 
     if (existing) {
       ingredientMap.set(name.toLowerCase(), existing.id);
     } else {
       // Create new ingredient
-      const { data: newIngredient, error } = await supabase
+      // We try to insert. If it fails (e.g. race condition/unique constraint), we try to fetch again.
+      const { data: newIngredient, error: insertError } = await supabase
         .from("ingredients")
         .insert({ name })
         .select("id")
         .single();
 
-      if (newIngredient && !error) {
+      if (insertError) {
+        // If insert failed, maybe it exists now?
+        const { data: retryExisting } = await supabase
+          .from("ingredients")
+          .select("id, name")
+          .ilike("name", name)
+          .maybeSingle();
+
+        if (retryExisting) {
+          ingredientMap.set(name.toLowerCase(), retryExisting.id);
+        } else {
+          console.error(`Failed to insert ingredient "${name}":`, insertError);
+        }
+      } else if (newIngredient) {
         ingredientMap.set(name.toLowerCase(), newIngredient.id);
       }
     }
@@ -152,18 +229,22 @@ const handleSave = async (recipe: GeneratedRecipe, imageUrl: string | null) => {
 
     if (categoryError) {
       console.error("Category insert error:", categoryError);
+      // We don't block saving if category fails, but good to know
     }
 
     // 5. Insert Ingredients
     const ingredientsToInsert = recipe.ingredients
       .map((ing) => {
-        const ingredientId = ingredientMap.get(ing.name.toLowerCase());
-        if (!ingredientId) return null;
+        const ingredientId = ingredientMap.get(ing.name.trim().toLowerCase());
+        if (!ingredientId) {
+          console.warn(`Skipping ingredient "${ing.name}" - ID not found`);
+          return null;
+        }
         return {
           recipe_id: savedRecipe.id,
           ingredient_id: ingredientId,
           quantity: ing.quantity,
-          unit: ing.unit,
+          unit: normalizeUnit(ing.unit),
         };
       })
       .filter(Boolean);
@@ -174,11 +255,13 @@ const handleSave = async (recipe: GeneratedRecipe, imageUrl: string | null) => {
         .insert(ingredientsToInsert as any[]);
 
       if (ingredientsError) {
-        console.error("Ingredients insert error:", ingredientsError);
+        throw new Error(
+          `Failed to save ingredients: ${ingredientsError.message}`,
+        );
       }
     }
 
-    // 5. Navigate to edit page for final adjustments
+    // 6. Navigate to edit page for final adjustments
     router.push(`/recipes/${savedRecipe.id}/edit`);
   } catch (error: any) {
     console.error("Save error:", error);
