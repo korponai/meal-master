@@ -20,6 +20,22 @@ const ingredientSchema = z
     path: ["ingredient"],
   });
 
+interface NutritionValue {
+  value: number | null;
+  unit: string;
+}
+
+interface NutritionData {
+  calories?: NutritionValue;
+  protein?: NutritionValue;
+  carbohydrates?: NutritionValue;
+  fat?: NutritionValue;
+  water?: NutritionValue;
+  cholesterol?: NutritionValue;
+  dietaryFiber?: NutritionValue;
+  sugar?: NutritionValue;
+}
+
 const recipeSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -27,6 +43,7 @@ const recipeSchema = z.object({
   visibility: z.enum(visibilities),
   experience: z.string().optional(),
   allergens: z.array(z.string()).optional(),
+  nutrients: z.any().optional(),
 });
 
 // Emits
@@ -34,7 +51,7 @@ const emit = defineEmits<{
   (
     e: "submit",
     payload: {
-      recipe: z.infer<typeof recipeSchema>;
+      recipe: z.infer<typeof recipeSchema> & { nutrients?: NutritionData };
       ingredients: RecipeIngredient[];
       imageFile: File | null;
     },
@@ -54,7 +71,11 @@ const form = reactive({
   visibility: "public" as (typeof visibilities)[number],
   experience: "",
   allergens: [] as string[],
+  nutrients: null as NutritionData | null,
 });
+
+const isGeneratingNutrients = ref(false);
+const nutrientsError = ref<string | null>(null);
 
 const ingredients = ref<RecipeIngredient[]>([
   { ingredient: null, quantity: null, unit: "gram" },
@@ -149,6 +170,7 @@ watch(
       form.visibility = newData.visibility || "public";
       form.experience = newData.experience || "";
       form.allergens = newData.allergens || [];
+      form.nutrients = newData.nutrients || null;
 
       if (newData.image_url) {
         imagePreview.value = newData.image_url;
@@ -219,10 +241,57 @@ const validate = () => {
   return result.success && !hasIngredientErrors;
 };
 
+const generateNutrients = async () => {
+  // Validate that we have title and ingredients
+  if (!form.title || form.title.length < 3) {
+    nutrientsError.value = "Please enter a recipe title first";
+    return;
+  }
+
+  const validIngredients = ingredients.value.filter(
+    (ing) => ing.ingredient && ing.quantity && ing.unit,
+  );
+
+  if (validIngredients.length === 0) {
+    nutrientsError.value = "Please add ingredients first";
+    return;
+  }
+
+  isGeneratingNutrients.value = true;
+  nutrientsError.value = null;
+
+  try {
+    const response = await $fetch<{ nutrition: NutritionData }>(
+      "/api/ai/generate-nutrients",
+      {
+        method: "POST",
+        body: {
+          recipeTitle: form.title,
+          ingredients: validIngredients.map((ing) => ({
+            name: ing.ingredient!.name,
+            quantity: ing.quantity,
+            unit: ing.unit,
+          })),
+          servingSize: 1,
+        },
+      },
+    );
+
+    if (response.nutrition) {
+      form.nutrients = response.nutrition;
+    }
+  } catch (error: any) {
+    console.error("Error generating nutrients:", error);
+    nutrientsError.value = error.message || "Failed to generate nutrients";
+  } finally {
+    isGeneratingNutrients.value = false;
+  }
+};
+
 const onSubmit = () => {
   if (!validate()) return;
   emit("submit", {
-    recipe: { ...form },
+    recipe: { ...form, nutrients: form.nutrients || undefined },
     ingredients: ingredients.value,
     imageFile: imageFile.value,
   });
@@ -472,6 +541,89 @@ const onSubmit = () => {
         class="text-sm text-red-600 font-medium"
       >
         {{ $t("allergen_warning") }}
+      </p>
+    </div>
+
+    <!-- Nutrients -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-medium text-gray-900">
+          {{ $t("nutrition_title") }}
+        </h3>
+        <button
+          type="button"
+          @click="generateNutrients"
+          :disabled="isGeneratingNutrients"
+          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+          :class="[
+            form.nutrients
+              ? 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
+              : 'bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100',
+          ]"
+        >
+          <svg
+            v-if="isGeneratingNutrients"
+            class="animate-spin h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            />
+          </svg>
+          {{
+            isGeneratingNutrients
+              ? $t("generating_nutrients")
+              : form.nutrients
+                ? $t("regenerate_nutrients")
+                : $t("generate_nutrients")
+          }}
+        </button>
+      </div>
+
+      <!-- Display current nutrients if available -->
+      <RecipesNutritionDisplay
+        v-if="form.nutrients"
+        :nutrition="form.nutrients"
+      />
+
+      <!-- Error message -->
+      <p v-if="nutrientsError" class="text-sm text-red-600">
+        {{ nutrientsError }}
+      </p>
+
+      <!-- Hint when no nutrients -->
+      <p
+        v-if="!form.nutrients && !nutrientsError"
+        class="text-sm text-gray-500"
+      >
+        {{ $t("ai_generate_description") }}
       </p>
     </div>
 

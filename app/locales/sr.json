@@ -156,5 +156,19 @@
   "ai_preview": "Pregled",
   "save_and_edit": "Sačuvaj i uredi",
   "ai_error": "Generisanje nije uspelo. Molimo pokušajte ponovo.",
-  "sensitivities_applied": "Vaše intolerancije na hranu će biti primenjene"
+  "sensitivities_applied": "Vaše intolerancije na hranu će biti primenjene",
+  "nutrition_title": "Hranljive Vrednosti i Kalorije",
+  "nutrition_calories": "Kalorije",
+  "nutrition_protein": "Protein",
+  "nutrition_carbohydrates": "Ugljeni Hidrati",
+  "nutrition_fat": "Masti",
+  "nutrition_water": "Voda",
+  "nutrition_cholesterol": "Holesterol",
+  "nutrition_dietaryFiber": "Vlakna",
+  "nutrition_sugar": "Šećer",
+  "generate_nutrients": "Generiši Hranljive Vrednosti",
+  "regenerate_nutrients": "Regeneriši Hranljive Vrednosti",
+  "generating_nutrients": "Generisanje hranljivih vrednosti...",
+  "nutrients_generated": "Hranljive vrednosti uspešno generisane!",
+  "nutrients_error": "Generisanje hranljivih vrednosti nije uspelo. Pokušajte ponovo."
 }

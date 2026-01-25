@@ -156,5 +156,19 @@
   "ai_preview": "Preview",
   "save_and_edit": "Save & Edit",
   "ai_error": "Failed to generate. Please try again.",
-  "sensitivities_applied": "Your food sensitivities will be applied"
+  "sensitivities_applied": "Your food sensitivities will be applied",
+  "nutrition_title": "Nutrition & Calories",
+  "nutrition_calories": "Calories",
+  "nutrition_protein": "Protein",
+  "nutrition_carbohydrates": "Carbs",
+  "nutrition_fat": "Fat",
+  "nutrition_water": "Water",
+  "nutrition_cholesterol": "Cholesterol",
+  "nutrition_dietaryFiber": "Fiber",
+  "nutrition_sugar": "Sugar",
+  "generate_nutrients": "Generate Nutrients",
+  "regenerate_nutrients": "Regenerate Nutrients",
+  "generating_nutrients": "Generating nutrients...",
+  "nutrients_generated": "Nutrients generated successfully!",
+  "nutrients_error": "Failed to generate nutrients. Please try again."
 }

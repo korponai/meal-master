@@ -66,6 +66,7 @@ const handleSubmit = async (payload: {
         visibility: payload.recipe.visibility,
         experience: payload.recipe.experience || null,
         allergens: payload.recipe.allergens || [],
+        nutrients: payload.recipe.nutrients || null,
         image_url: imageUrl,
         // user_id is handled by database default auth.uid()
       })

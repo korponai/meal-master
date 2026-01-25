@@ -175,6 +175,7 @@ export type Database = {
           id: string;
           image_url: string | null;
           instructions: string | null;
+          nutrients: Json | null;
           title: string;
           updated_at: string | null;
           user_id: string;
@@ -188,6 +189,7 @@ export type Database = {
           id?: string;
           image_url?: string | null;
           instructions?: string | null;
+          nutrients?: Json | null;
           title: string;
           updated_at?: string | null;
           user_id?: string;
@@ -201,6 +203,7 @@ export type Database = {
           id?: string;
           image_url?: string | null;
           instructions?: string | null;
+          nutrients?: Json | null;
           title?: string;
           updated_at?: string | null;
           user_id?: string;

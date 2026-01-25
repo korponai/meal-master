@@ -188,6 +188,13 @@ const getIngredientName = (name: string) => {
         {{ recipe.description }}
       </p>
 
+      <!-- Nutrition Display -->
+      <RecipesNutritionDisplay
+        v-if="recipe.nutrients"
+        :nutrition="recipe.nutrients"
+        class="mb-8"
+      />
+
       <div class="grid md:grid-cols-3 gap-12">
         <div class="md:col-span-1">
           <h3 class="font-bold text-xl mb-4">{{ $t("ingredients_label") }}</h3>

@@ -105,6 +105,7 @@ const handleSubmit = async (payload: {
         visibility: payload.recipe.visibility,
         experience: payload.recipe.experience || null,
         allergens: payload.recipe.allergens || [],
+        nutrients: payload.recipe.nutrients || null,
         image_url: imageUrl,
       })
       .eq("id", recipeId);

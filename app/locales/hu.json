@@ -156,5 +156,19 @@
   "ai_preview": "Előnézet",
   "save_and_edit": "Mentés és szerkesztés",
   "ai_error": "Generálás sikertelen. Kérjük, próbálja újra.",
-  "sensitivities_applied": "Az Ön ételérzékenységei figyelembe lesznek véve"
+  "sensitivities_applied": "Az Ön ételérzékenységei figyelembe lesznek véve",
+  "nutrition_title": "Tápanyag és Kalória",
+  "nutrition_calories": "Kalória",
+  "nutrition_protein": "Fehérje",
+  "nutrition_carbohydrates": "Szénhidrát",
+  "nutrition_fat": "Zsír",
+  "nutrition_water": "Víz",
+  "nutrition_cholesterol": "Koleszterin",
+  "nutrition_dietaryFiber": "Élelmi Rost",
+  "nutrition_sugar": "Cukor",
+  "generate_nutrients": "Tápanyagok Generálása",
+  "regenerate_nutrients": "Tápanyagok Újragenerálása",
+  "generating_nutrients": "Tápanyagok generálása...",
+  "nutrients_generated": "Tápanyagok sikeresen generálva!",
+  "nutrients_error": "Tápanyagok generálása sikertelen. Kérjük, próbálja újra."
 }
