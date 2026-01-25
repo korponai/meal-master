@@ -170,5 +170,7 @@
   "regenerate_nutrients": "Regeneriši Hranljive Vrednosti",
   "generating_nutrients": "Generisanje hranljivih vrednosti...",
   "nutrients_generated": "Hranljive vrednosti uspešno generisane!",
-  "nutrients_error": "Generisanje hranljivih vrednosti nije uspelo. Pokušajte ponovo."
+  "nutrients_error": "Generisanje hranljivih vrednosti nije uspelo. Pokušajte ponovo.",
+  "registration_disabled": "Registracija onemogućena",
+  "registration_disabled_desc": "Registracija novih korisnika je trenutno zatvorena. Ako već imate nalog, molimo vas da se prijavite."
 }

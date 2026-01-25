@@ -5,6 +5,8 @@ definePageMeta({
 
 const supabase = useSupabaseClient();
 const { t } = useI18n();
+const config = useRuntimeConfig();
+const allowRegistration = config.public.enableNewRegistration;
 
 const fullName = ref("");
 const email = ref("");
@@ -46,7 +48,19 @@ const handleRegister = async () => {
     <h2 class="mt-6 text-2xl font-bold text-gray-900 mb-8">
       {{ $t("register_title") }}
     </h2>
-    <form @submit.prevent="handleRegister" class="space-y-6">
+    <div
+      v-if="!allowRegistration"
+      class="rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-center text-yellow-800"
+    >
+      <p class="font-medium">{{ $t("registration_disabled") }}</p>
+      <p class="mt-2 text-sm">{{ $t("registration_disabled_desc") }}</p>
+      <div class="mt-4">
+        <NuxtLink to="/login" class="font-medium text-black hover:underline">
+          {{ $t("login_here") }}
+        </NuxtLink>
+      </div>
+    </div>
+    <form v-else @submit.prevent="handleRegister" class="space-y-6">
       <div>
         <label
           for="fullName"

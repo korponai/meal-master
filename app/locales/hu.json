@@ -170,5 +170,7 @@
   "regenerate_nutrients": "Tápanyagok Újragenerálása",
   "generating_nutrients": "Tápanyagok generálása...",
   "nutrients_generated": "Tápanyagok sikeresen generálva!",
-  "nutrients_error": "Tápanyagok generálása sikertelen. Kérjük, próbálja újra."
+  "nutrients_error": "Tápanyagok generálása sikertelen. Kérjük, próbálja újra.",
+  "registration_disabled": "Regisztráció lezárva",
+  "registration_disabled_desc": "Az új felhasználók regisztrációja jelenleg szünetel. Ha már van fiókja, kérjük, jelentkezzen be."
 }

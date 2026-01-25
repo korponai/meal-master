@@ -170,5 +170,7 @@
   "regenerate_nutrients": "Regenerate Nutrients",
   "generating_nutrients": "Generating nutrients...",
   "nutrients_generated": "Nutrients generated successfully!",
-  "nutrients_error": "Failed to generate nutrients. Please try again."
+  "nutrients_error": "Failed to generate nutrients. Please try again.",
+  "registration_disabled": "Registration Disabled",
+  "registration_disabled_desc": "New user registration is currently closed. If you already have an account, please log in."
 }

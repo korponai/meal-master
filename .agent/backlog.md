@@ -109,3 +109,14 @@ It is intended to be used as **context for AI-assisted development (context engi
 - Image download from DALL-E and upload to Supabase storage
 - Environment variables: `CHATGPT_API_KEY`, `CHATGPT_RECIPE_MODEL`, `CHATGPT_IMAGE_MODEL`
 - Localization support (EN, HU, SR)
+
+### Iteration 7 – Restrict Registration
+
+**Status:** In Progress
+**Goal:** Restrict new user registrations based on environment variable.
+
+**Deliverables:**
+
+- `ENABLE_NEW_REGISTRATION` environment variable
+- Conditional rendering of registration form
+- Message for disabled registration

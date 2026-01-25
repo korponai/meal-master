@@ -13,6 +13,8 @@ export default defineNuxtConfig({
         key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
       },
       paypalClientId: process.env.NUXT_PUBLIC_PAYPAL_CLIENT_ID,
+      enableNewRegistration:
+        process.env.NUXT_PUBLIC_ENABLE_NEW_REGISTRATION !== "false",
     },
   },
   modules: [
