@@ -28,8 +28,13 @@ Always implement the current iteration based on the backlog.
 - Pinia state management (ready)
 - Zod validation (ready)
 - Donation feature (PayPal integration)
+- AI-powered recipe generation (OpenAI GPT-4o-mini + DALL-E 3)
 
 ## Environment Variables
 
-- NUXT_PUBLIC_API_URL (example)
-- NUXT_PUBLIC_PAYPAL_CLIENT_ID (required for donation feature)
+- `NUXT_PUBLIC_SUPABASE_URL` - Supabase project URL
+- `NUXT_PUBLIC_SUPABASE_KEY` - Supabase anon key
+- `NUXT_PUBLIC_PAYPAL_CLIENT_ID` - PayPal client ID for donation feature
+- `CHATGPT_API_KEY` - OpenAI API key for AI recipe generation
+- `CHATGPT_RECIPE_MODEL` - Model for recipe generation (default: gpt-4o-mini)
+- `CHATGPT_IMAGE_MODEL` - Model for image generation (default: dall-e-3)

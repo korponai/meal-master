@@ -37,16 +37,33 @@ const handleDelete = async (id: string) => {
 <template>
   <div class="space-y-12">
     <div class="flex items-center justify-between">
-       <h1 class="text-3xl font-bold tracking-tight text-gray-900">Recipes</h1>
-       <NuxtLink to="/recipes/new" class="bg-black text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors">
-         + Add Recipe
-       </NuxtLink>
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Recipes</h1>
+      <div class="flex items-center gap-3">
+        <NuxtLink
+          to="/recipes/ai-generate"
+          class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
+        >
+          ✨ {{ $t("ai_generate") }}
+        </NuxtLink>
+        <NuxtLink
+          to="/recipes/new"
+          class="bg-black text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+        >
+          + {{ $t("add_recipe") || "Add Recipe" }}
+        </NuxtLink>
+      </div>
     </div>
 
     <div v-for="category in categories" :key="category" class="space-y-6">
       <div v-if="groupedRecipes[category]?.length">
-        <h2 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4">{{ category }}</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <h2
+          class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4"
+        >
+          {{ category }}
+        </h2>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
           <RecipeCard
             v-for="recipe in groupedRecipes[category]"
             :key="recipe.id"
@@ -56,7 +73,7 @@ const handleDelete = async (id: string) => {
         </div>
       </div>
     </div>
-    
+
     <div v-if="!recipes?.length" class="text-center py-20 text-gray-500">
       <p>No recipes found. Create your first one!</p>
     </div>

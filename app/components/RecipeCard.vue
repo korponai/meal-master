@@ -4,7 +4,7 @@ const props = defineProps<{
     id: string;
     title: string;
     image_url: string | null;
-    category: string;
+    category: string | null;
   };
 }>();
 

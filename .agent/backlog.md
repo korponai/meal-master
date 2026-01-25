@@ -91,3 +91,21 @@ It is intended to be used as **context for AI-assisted development (context engi
 - Week navigation (previous/next/current)
 - TypeScript types (`types/meal-plan.ts`)
 - Menu item update
+
+### Iteration 6 – AI Recipe Generation
+
+**Status:** Done
+**Goal:** Implement AI-powered recipe generation using OpenAI.
+
+**Deliverables:**
+
+- Server API endpoint `/api/ai/generate-recipe` (GPT-4o-mini)
+- Server API endpoint `/api/ai/generate-recipe-image` (DALL-E 3)
+- AI Recipe Generator component (`components/recipes/AIRecipeGenerator.vue`)
+- AI Generate page (`/recipes/ai-generate`)
+- "AI Generate" button on recipes index page
+- Sensitivity-aware recipe generation (excludes user's food sensitivities)
+- Auto-creation of ingredients in database
+- Image download from DALL-E and upload to Supabase storage
+- Environment variables: `CHATGPT_API_KEY`, `CHATGPT_RECIPE_MODEL`, `CHATGPT_IMAGE_MODEL`
+- Localization support (EN, HU, SR)

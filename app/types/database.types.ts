@@ -7,23 +7,6 @@ export type Json =
   | Json[];
 
 export type Database = {
-  internal: {
-    Tables: {
-      [key: string]: never;
-    };
-    Views: {
-      [key: string]: never;
-    };
-    Functions: {
-      [key: string]: never;
-    };
-    Enums: {
-      [key: string]: never;
-    };
-    CompositeTypes: {
-      [key: string]: never;
-    };
-  };
   public: {
     Tables: {
       ingredients: {
@@ -61,7 +44,7 @@ export type Database = {
           id?: string;
           meal_type?: string | null;
           recipe_id?: string | null;
-          user_id: string;
+          user_id?: string;
         };
         Update: {
           created_at?: string | null;
@@ -91,8 +74,6 @@ export type Database = {
           full_name: string | null;
           id: string;
           updated_at: string | null;
-          username: string | null;
-          website: string | null;
         };
         Insert: {
           avatar_url?: string | null;
@@ -102,8 +83,6 @@ export type Database = {
           full_name?: string | null;
           id: string;
           updated_at?: string | null;
-          username?: string | null;
-          website?: string | null;
         };
         Update: {
           avatar_url?: string | null;
@@ -113,62 +92,31 @@ export type Database = {
           full_name?: string | null;
           id?: string;
           updated_at?: string | null;
-          username?: string | null;
-          website?: string | null;
         };
         Relationships: [];
       };
-      recipe_allergens: {
-        Row: {
-          allergen: string;
-          created_at: string | null;
-          id: string;
-          recipe_id: string;
-        };
-        Insert: {
-          allergen: string;
-          created_at?: string | null;
-          id?: string;
-          recipe_id: string;
-        };
-        Update: {
-          allergen?: string;
-          created_at?: string | null;
-          id?: string;
-          recipe_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "recipe_allergens_recipe_id_fkey";
-            columns: ["recipe_id"];
-            isOneToOne: false;
-            referencedRelation: "recipes";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
       recipe_ingredients: {
         Row: {
-          amount: number;
           created_at: string | null;
           id: string;
           ingredient_id: string;
+          quantity: number;
           recipe_id: string;
           unit: string;
         };
         Insert: {
-          amount: number;
           created_at?: string | null;
           id?: string;
           ingredient_id: string;
+          quantity: number;
           recipe_id: string;
           unit: string;
         };
         Update: {
-          amount?: number;
           created_at?: string | null;
           id?: string;
           ingredient_id?: string;
+          quantity?: number;
           recipe_id?: string;
           unit?: string;
         };
@@ -191,45 +139,89 @@ export type Database = {
       };
       recipes: {
         Row: {
-          cook_time: number;
+          allergens: string[] | null;
+          category: string | null;
           created_at: string | null;
           description: string | null;
+          experience: string | null;
           id: string;
           image_url: string | null;
           instructions: string | null;
-          is_public: boolean | null;
-          prep_time: number;
-          servings: number;
           title: string;
+          updated_at: string | null;
+          user_id: string;
+          visibility: string;
+        };
+        Insert: {
+          allergens?: string[] | null;
+          category?: string | null;
+          created_at?: string | null;
+          description?: string | null;
+          experience?: string | null;
+          id?: string;
+          image_url?: string | null;
+          instructions?: string | null;
+          title: string;
+          updated_at?: string | null;
+          user_id?: string;
+          visibility?: string;
+        };
+        Update: {
+          allergens?: string[] | null;
+          category?: string | null;
+          created_at?: string | null;
+          description?: string | null;
+          experience?: string | null;
+          id?: string;
+          image_url?: string | null;
+          instructions?: string | null;
+          title?: string;
+          updated_at?: string | null;
+          user_id?: string;
+          visibility?: string;
+        };
+        Relationships: [];
+      };
+      shopping_list_items: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          ingredient_id: string | null;
+          is_checked: boolean | null;
+          item_name: string;
+          quantity: number | null;
+          unit: string | null;
           user_id: string;
         };
         Insert: {
-          cook_time: number;
           created_at?: string | null;
-          description?: string | null;
           id?: string;
-          image_url?: string | null;
-          instructions?: string | null;
-          is_public?: boolean | null;
-          prep_time: number;
-          servings: number;
-          title: string;
+          ingredient_id?: string | null;
+          is_checked?: boolean | null;
+          item_name: string;
+          quantity?: number | null;
+          unit?: string | null;
           user_id: string;
         };
         Update: {
-          cook_time?: number;
           created_at?: string | null;
-          description?: string | null;
           id?: string;
-          image_url?: string | null;
-          instructions?: string | null;
-          is_public?: boolean | null;
-          prep_time?: number;
-          servings?: number;
-          title?: string;
+          ingredient_id?: string | null;
+          is_checked?: boolean | null;
+          item_name?: string;
+          quantity?: number | null;
+          unit?: string | null;
           user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "shopping_list_items_ingredient_id_fkey";
+            columns: ["ingredient_id"];
+            isOneToOne: false;
+            referencedRelation: "ingredients";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {
@@ -327,19 +319,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never;
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
-    | { schema: keyof Database },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database;
-  }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never;

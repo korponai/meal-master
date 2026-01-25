@@ -139,5 +139,20 @@
   "meal_type_evening_snack": "Evening Snack",
   "meal_planner_title": "Weekly Meal Planner",
   "today": "Today",
-  "add": "Add"
+  "add": "Add",
+  "add_recipe": "Add Recipe",
+  "ai_generate": "AI Generate",
+  "ai_generate_recipe": "AI Recipe Generator",
+  "ai_generate_description": "Let AI create a delicious recipe for you, respecting your food sensitivities.",
+  "ai_custom_prompt": "Custom focus (optional)",
+  "ai_custom_prompt_placeholder": "e.g., low-carb dinner, Italian pasta, quick breakfast...",
+  "generate_recipe": "Generate Recipe",
+  "generate_image": "Generate Image",
+  "regenerate": "Regenerate",
+  "generating_recipe": "Generating recipe...",
+  "generating_image": "Generating image...",
+  "ai_preview": "Preview",
+  "save_and_edit": "Save & Edit",
+  "ai_error": "Failed to generate. Please try again.",
+  "sensitivities_applied": "Your food sensitivities will be applied"
 }

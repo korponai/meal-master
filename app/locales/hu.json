@@ -139,5 +139,20 @@
   "meal_type_evening_snack": "Esti nasi",
   "meal_planner_title": "Heti Étrend Tervező",
   "today": "Ma",
-  "add": "Hozzáadás"
+  "add": "Hozzáadás",
+  "add_recipe": "Recept hozzáadása",
+  "ai_generate": "AI Generálás",
+  "ai_generate_recipe": "AI Recept Generátor",
+  "ai_generate_description": "Hagyja, hogy az AI készítsen Önnek egy finom receptet, figyelembe véve az ételérzékenységeit.",
+  "ai_custom_prompt": "Egyéni fókusz (opcionális)",
+  "ai_custom_prompt_placeholder": "pl. alacsony szénhidráttartalmú vacsora, olasz tészta, gyors reggeli...",
+  "generate_recipe": "Recept generálása",
+  "generate_image": "Kép generálása",
+  "regenerate": "Újragenerálás",
+  "generating_recipe": "Recept generálása...",
+  "generating_image": "Kép generálása...",
+  "ai_preview": "Előnézet",
+  "save_and_edit": "Mentés és szerkesztés",
+  "ai_error": "Generálás sikertelen. Kérjük, próbálja újra.",
+  "sensitivities_applied": "Az Ön ételérzékenységei figyelembe lesznek véve"
 }

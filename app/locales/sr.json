@@ -139,5 +139,20 @@
   "meal_type_evening_snack": "Večernja užina",
   "meal_planner_title": "Nedeljni Planer Ishrane",
   "today": "Danas",
-  "add": "Dodaj"
+  "add": "Dodaj",
+  "add_recipe": "Dodaj recept",
+  "ai_generate": "AI Generisanje",
+  "ai_generate_recipe": "AI Generator Recepata",
+  "ai_generate_description": "Dozvolite AI-u da kreira ukusan recept za vas, uzimajući u obzir vaše intolerancije na hranu.",
+  "ai_custom_prompt": "Poseban fokus (opciono)",
+  "ai_custom_prompt_placeholder": "npr. večera sa malo ugljenih hidrata, italijanska pasta, brz doručak...",
+  "generate_recipe": "Generiši recept",
+  "generate_image": "Generiši sliku",
+  "regenerate": "Regeneriši",
+  "generating_recipe": "Generisanje recepta...",
+  "generating_image": "Generisanje slike...",
+  "ai_preview": "Pregled",
+  "save_and_edit": "Sačuvaj i uredi",
+  "ai_error": "Generisanje nije uspelo. Molimo pokušajte ponovo.",
+  "sensitivities_applied": "Vaše intolerancije na hranu će biti primenjene"
 }

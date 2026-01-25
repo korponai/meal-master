@@ -3,6 +3,10 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   runtimeConfig: {
+    // Server-only (not exposed to client)
+    chatgptApiKey: process.env.CHATGPT_API_KEY,
+    chatgptRecipeModel: process.env.CHATGPT_RECIPE_MODEL || "gpt-4o-mini",
+    chatgptImageModel: process.env.CHATGPT_IMAGE_MODEL || "dall-e-3",
     public: {
       supabase: {
         url: process.env.NUXT_PUBLIC_SUPABASE_URL,
