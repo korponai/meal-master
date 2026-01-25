@@ -137,10 +137,38 @@ export type Database = {
           },
         ];
       };
+      recipe_categories: {
+        Row: {
+          id: string;
+          recipe_id: string;
+          category: string;
+          created_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          recipe_id: string;
+          category: string;
+          created_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          recipe_id?: string;
+          category?: string;
+          created_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "recipe_categories_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       recipes: {
         Row: {
           allergens: string[] | null;
-          category: string | null;
           created_at: string | null;
           description: string | null;
           experience: string | null;
@@ -154,7 +182,6 @@ export type Database = {
         };
         Insert: {
           allergens?: string[] | null;
-          category?: string | null;
           created_at?: string | null;
           description?: string | null;
           experience?: string | null;
@@ -168,7 +195,6 @@ export type Database = {
         };
         Update: {
           allergens?: string[] | null;
-          category?: string | null;
           created_at?: string | null;
           description?: string | null;
           experience?: string | null;

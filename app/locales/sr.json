@@ -78,6 +78,8 @@
   "unit_label": "Jedinica",
   "quantity_label": "Količina",
   "select_category": "Izaberi kategoriju",
+  "select_categories": "Izaberi kategorije",
+  "categories_required_error": "Molimo izaberite barem jednu kategoriju",
   "select_visibility": "Izaberi vidljivost",
   "visibility_public": "Javno",
   "visibility_authenticated": "Prijavljeni",

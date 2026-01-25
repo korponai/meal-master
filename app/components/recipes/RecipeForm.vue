@@ -23,7 +23,7 @@ const ingredientSchema = z
 const recipeSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  category: z.enum(categories),
+  categories: z.array(z.enum(categories)).min(1, "categories_required_error"),
   visibility: z.enum(visibilities),
   experience: z.string().optional(),
   allergens: z.array(z.string()).optional(),
@@ -50,7 +50,7 @@ const props = defineProps<{
 const form = reactive({
   title: "",
   description: "",
-  category: "" as (typeof categories)[number] | "",
+  categories: [] as (typeof categories)[number][],
   visibility: "public" as (typeof visibilities)[number],
   experience: "",
   allergens: [] as string[],
@@ -123,13 +123,29 @@ const toggleAllergen = (allergen: string) => {
 };
 
 // Watch initialData to populate form
+const toggleCategory = (category: (typeof categories)[number]) => {
+  const idx = form.categories.indexOf(category);
+  if (idx === -1) {
+    form.categories.push(category);
+  } else {
+    form.categories.splice(idx, 1);
+  }
+};
+
 watch(
   () => props.initialData,
   (newData) => {
     if (newData) {
       form.title = newData.title || "";
       form.description = newData.description || "";
-      form.category = newData.category || "";
+      // Handle categories from recipe_categories relation
+      if (Array.isArray(newData.recipe_categories)) {
+        form.categories = newData.recipe_categories.map(
+          (rc: any) => rc.category,
+        );
+      } else {
+        form.categories = [];
+      }
       form.visibility = newData.visibility || "public";
       form.experience = newData.experience || "";
       form.allergens = newData.allergens || [];
@@ -206,7 +222,7 @@ const validate = () => {
 const onSubmit = () => {
   if (!validate()) return;
   emit("submit", {
-    recipe: { ...form, category: form.category as any },
+    recipe: { ...form },
     ingredients: ingredients.value,
     imageFile: imageFile.value,
   });
@@ -290,21 +306,52 @@ const onSubmit = () => {
         </p>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">{{
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-2">{{
           $t("recipe_category_label")
         }}</label>
-        <select
-          v-model="form.category"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        >
-          <option value="" disabled>{{ $t("select_category") }}</option>
-          <option v-for="cat in categories" :key="cat" :value="cat">
-            {{ $t("category_" + cat.toLowerCase()) }}
-          </option>
-        </select>
-        <p v-if="errors.category" class="mt-1 text-sm text-red-600">
-          {{ errors.category }}
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div
+            v-for="cat in categories"
+            :key="cat"
+            class="flex items-center justify-between p-3 rounded-lg border transition-colors cursor-pointer"
+            :class="[
+              form.categories.includes(cat)
+                ? 'bg-indigo-50 border-indigo-300'
+                : 'bg-white border-gray-200 hover:border-gray-300',
+            ]"
+            @click="toggleCategory(cat)"
+          >
+            <span class="text-sm font-medium text-gray-700">
+              {{ $t("category_" + cat.toLowerCase()) }}
+            </span>
+            <div
+              class="w-5 h-5 rounded border-2 flex items-center justify-center transition-colors"
+              :class="[
+                form.categories.includes(cat)
+                  ? 'bg-indigo-600 border-indigo-600'
+                  : 'bg-white border-gray-300',
+              ]"
+            >
+              <svg
+                v-if="form.categories.includes(cat)"
+                class="w-3 h-3 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <p v-if="errors.categories" class="mt-2 text-sm text-red-600">
+          {{ $t(errors.categories) }}
         </p>
       </div>
 

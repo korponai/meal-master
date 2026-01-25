@@ -63,7 +63,6 @@ const handleSubmit = async (payload: {
       .insert({
         title: payload.recipe.title,
         description: payload.recipe.description,
-        category: payload.recipe.category,
         visibility: payload.recipe.visibility,
         experience: payload.recipe.experience || null,
         allergens: payload.recipe.allergens || [],
@@ -76,7 +75,23 @@ const handleSubmit = async (payload: {
     if (recipeError) throw recipeError;
     if (!recipe) throw new Error("Failed to create recipe");
 
-    // 3. Insert Ingredients
+    // 3. Insert Categories
+    if (payload.recipe.categories && payload.recipe.categories.length > 0) {
+      const categoriesToInsert = payload.recipe.categories.map(
+        (cat: string) => ({
+          recipe_id: recipe.id,
+          category: cat,
+        }),
+      );
+
+      const { error: categoriesError } = await supabase
+        .from("recipe_categories")
+        .insert(categoriesToInsert);
+
+      if (categoriesError) throw categoriesError;
+    }
+
+    // 4. Insert Ingredients
     const ingredientsToInsert = payload.ingredients.map((ing) => ({
       recipe_id: recipe.id,
       ingredient_id: ing.ingredient.id,

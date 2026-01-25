@@ -20,7 +20,9 @@ const { data: recipe, error: fetchError } = await useAsyncData(
     // Fetch recipe components joined
     const { data, error } = await supabase
       .from("recipes")
-      .select("*, recipe_ingredients(*, ingredients(id, name))")
+      .select(
+        "*, recipe_categories(category), recipe_ingredients(*, ingredients(id, name))",
+      )
       .eq("id", recipeId)
       .single();
 
@@ -100,7 +102,6 @@ const handleSubmit = async (payload: {
       .update({
         title: payload.recipe.title,
         description: payload.recipe.description,
-        category: payload.recipe.category,
         visibility: payload.recipe.visibility,
         experience: payload.recipe.experience || null,
         allergens: payload.recipe.allergens || [],
@@ -110,8 +111,33 @@ const handleSubmit = async (payload: {
 
     if (updateError) throw updateError;
 
-    // 3. Sync Ingredients
-    // 3.1 Delete existing ingredients
+    // 3. Sync Categories
+    // 3.1 Delete existing categories
+    const { error: deleteCatError } = await supabase
+      .from("recipe_categories")
+      .delete()
+      .eq("recipe_id", recipeId);
+
+    if (deleteCatError) throw deleteCatError;
+
+    // 3.2 Insert new categories
+    if (payload.recipe.categories && payload.recipe.categories.length > 0) {
+      const categoriesToInsert = payload.recipe.categories.map(
+        (cat: string) => ({
+          recipe_id: recipeId,
+          category: cat,
+        }),
+      );
+
+      const { error: categoriesError } = await supabase
+        .from("recipe_categories")
+        .insert(categoriesToInsert);
+
+      if (categoriesError) throw categoriesError;
+    }
+
+    // 4. Sync Ingredients
+    // 4.1 Delete existing ingredients
     const { error: deleteError } = await supabase
       .from("recipe_ingredients")
       .delete()
@@ -119,7 +145,7 @@ const handleSubmit = async (payload: {
 
     if (deleteError) throw deleteError;
 
-    // 3.2 Insert new list
+    // 4.2 Insert new list
     if (payload.ingredients.length > 0) {
       const ingredientsToInsert = payload.ingredients.map((ing) => ({
         recipe_id: recipeId,

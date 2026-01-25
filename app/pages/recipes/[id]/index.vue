@@ -24,6 +24,7 @@ const { data } = await useAsyncData(`recipe-view-${recipeId}`, async () => {
       .select(
         `
                 *,
+                recipe_categories(category),
                 recipe_ingredients (
                     id,
                     quantity,
@@ -117,15 +118,22 @@ const getIngredientName = (name: string) => {
       >
         <div>
           <div class="flex flex-wrap gap-2 mb-3">
-            <span
-              class="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold uppercase tracking-wide"
+            <!-- Category Tags -->
+            <template
+              v-if="recipe.recipe_categories && recipe.recipe_categories.length"
             >
-              {{
-                te("category_" + recipe.category.toLowerCase())
-                  ? t("category_" + recipe.category.toLowerCase())
-                  : recipe.category
-              }}
-            </span>
+              <span
+                v-for="rc in recipe.recipe_categories"
+                :key="rc.category"
+                class="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold uppercase tracking-wide"
+              >
+                {{
+                  te("category_" + rc.category.toLowerCase())
+                    ? t("category_" + rc.category.toLowerCase())
+                    : rc.category
+                }}
+              </span>
+            </template>
             <!-- Allergens -->
             <template v-if="recipe.allergens && recipe.allergens.length">
               <span

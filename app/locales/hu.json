@@ -78,6 +78,8 @@
   "unit_label": "Mértékegység",
   "quantity_label": "Mennyiség",
   "select_category": "Válasszon kategóriát",
+  "select_categories": "Válasszon kategóriákat",
+  "categories_required_error": "Kérjük, válasszon legalább egy kategóriát",
   "select_visibility": "Válasszon láthatóságot",
   "visibility_public": "Nyilvános",
   "visibility_authenticated": "Bejelentkezett",

@@ -78,6 +78,8 @@
   "unit_label": "Unit",
   "quantity_label": "Quantity",
   "select_category": "Select category",
+  "select_categories": "Select categories",
+  "categories_required_error": "Please select at least one category",
   "select_visibility": "Select visibility",
   "visibility_public": "Public",
   "visibility_authenticated": "Authenticated",

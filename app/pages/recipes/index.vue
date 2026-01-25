@@ -10,7 +10,7 @@ const { data: recipes, refresh } = await useAsyncData("recipes", async () => {
   const userId = user.value?.id || user.value?.sub;
   const { data } = await supabase
     .from("recipes")
-    .select("id, title, image_url, category")
+    .select("id, title, image_url, recipe_categories(category)")
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
   return data || [];
@@ -18,11 +18,16 @@ const { data: recipes, refresh } = await useAsyncData("recipes", async () => {
 
 const categories = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
+// Group recipes by category - a recipe can appear in multiple groups
 const groupedRecipes = computed(() => {
   if (!recipes.value) return {};
   const groups: Record<string, typeof recipes.value> = {};
   categories.forEach((cat) => {
-    groups[cat] = recipes.value!.filter((r) => r.category === cat);
+    groups[cat] = recipes.value!.filter((r) =>
+      r.recipe_categories?.some(
+        (rc: { category: string }) => rc.category === cat,
+      ),
+    );
   });
   return groups;
 });

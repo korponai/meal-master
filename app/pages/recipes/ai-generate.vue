@@ -132,7 +132,6 @@ const handleSave = async (recipe: GeneratedRecipe, imageUrl: string | null) => {
       .insert({
         title: recipe.title,
         description: recipe.description,
-        category: recipe.category,
         visibility: "public", // Default to public
         allergens: recipe.allergens || [],
         image_url: finalImageUrl,
@@ -143,7 +142,19 @@ const handleSave = async (recipe: GeneratedRecipe, imageUrl: string | null) => {
     if (recipeError) throw recipeError;
     if (!savedRecipe) throw new Error("Failed to create recipe");
 
-    // 4. Insert Ingredients
+    // 4. Insert Category
+    const { error: categoryError } = await supabase
+      .from("recipe_categories")
+      .insert({
+        recipe_id: savedRecipe.id,
+        category: recipe.category,
+      });
+
+    if (categoryError) {
+      console.error("Category insert error:", categoryError);
+    }
+
+    // 5. Insert Ingredients
     const ingredientsToInsert = recipe.ingredients
       .map((ing) => {
         const ingredientId = ingredientMap.get(ing.name.toLowerCase());

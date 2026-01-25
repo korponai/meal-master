@@ -4,9 +4,11 @@ const props = defineProps<{
     id: string;
     title: string;
     image_url: string | null;
-    category: string | null;
+    recipe_categories?: { category: string }[];
   };
 }>();
+
+const { t, te } = useI18n();
 
 const emit = defineEmits(["delete"]);
 const router = useRouter();
@@ -52,7 +54,25 @@ const navigateToEdit = () => {
       </div>
     </div>
     <div class="p-4 flex flex-col flex-grow">
-      <h3 class="font-bold text-lg text-gray-900 mb-4">{{ recipe.title }}</h3>
+      <h3 class="font-bold text-lg text-gray-900 mb-2">{{ recipe.title }}</h3>
+
+      <!-- Category Tags -->
+      <div
+        v-if="recipe.recipe_categories?.length"
+        class="flex flex-wrap gap-1 mb-4"
+      >
+        <span
+          v-for="rc in recipe.recipe_categories"
+          :key="rc.category"
+          class="inline-block px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"
+        >
+          {{
+            te("category_" + rc.category.toLowerCase())
+              ? t("category_" + rc.category.toLowerCase())
+              : rc.category
+          }}
+        </span>
+      </div>
 
       <div class="mt-auto flex items-center justify-between gap-2">
         <NuxtLink
