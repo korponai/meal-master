@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Database } from "~/app/types/database.types";
+import type { Database } from "../../types/database.types";
 
 const props = defineProps<{
   isOpen: boolean;
@@ -17,15 +17,43 @@ const user = useSupabaseUser();
 const searchQuery = ref("");
 const selectedRecipeId = ref<string | null>(null);
 
-const { data: recipes } = await useAsyncData("recipes-list", async () => {
-  if (!user.value) return [];
-  const { data } = await supabase
-    .from("recipes")
-    .select("id, title, image_url")
-    .eq("user_id", user.value.id)
-    .order("title");
-  return data || [];
-});
+const { data: recipes, refresh } = await useAsyncData(
+  "recipes-local-list",
+  async () => {
+    const userId = user.value?.id || user.value?.sub;
+    console.log("Fetching recipes for modal. User ID:", userId);
+    if (!userId || userId === "undefined") {
+      console.warn("No valid user ID found, returning empty list.");
+      return [];
+    }
+    const { data, error } = await supabase
+      .from("recipes")
+      .select("id, title, image_url")
+      .eq("user_id", userId)
+      .order("title");
+
+    if (error) {
+      console.error("Error fetching recipes:", error);
+      return [];
+    }
+    console.log("Fetched recipes:", data?.length);
+    return data || [];
+  },
+  {
+    watch: [user],
+    server: false,
+    lazy: true,
+  },
+);
+
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      refresh();
+    }
+  },
+);
 
 const filteredRecipes = computed(() => {
   if (!recipes.value) return [];

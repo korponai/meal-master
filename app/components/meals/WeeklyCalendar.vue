@@ -11,7 +11,7 @@ import { enUS, hu, srLatn } from "date-fns/locale";
 import DayColumn from "./DayColumn.vue";
 import AddMealModal from "./AddMealModal.vue";
 
-import type { MealType, MealPlan } from "~/app/types/meal-plan";
+import type { MealType, MealPlan } from "../../types/meal-plan";
 
 const { locale } = useI18n();
 const { fetchMealPlans, addMealPlan, deleteMealPlan } = useMealPlan();
@@ -60,9 +60,20 @@ const loadMeals = async () => {
   }
 };
 
-onMounted(loadMeals);
+const user = useSupabaseUser();
+
+onMounted(() => {
+  if (user.value) {
+    loadMeals();
+  }
+});
 
 watch(weekStart, loadMeals);
+watch(user, (newUser) => {
+  if (newUser) {
+    loadMeals();
+  }
+});
 
 const getMealsForDate = (date: string) => {
   return meals.value.filter((m: MealPlan) => m.date === date);
