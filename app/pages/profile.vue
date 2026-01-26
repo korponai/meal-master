@@ -3,19 +3,27 @@ definePageMeta({
   middleware: "auth",
 });
 
-const supabase = useSupabaseClient();
+import type { Database } from "@/types/database.types";
+const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
-const { t } = useI18n();
+const { t, locale, setLocale } = useI18n();
 const { openDonationModal } = useDonation();
+const i18nCookie = useCookie("i18n_redirected", {
+  maxAge: 60 * 60 * 24 * 365,
+  path: "/",
+});
 
-const { data: profile, refresh } = await useAsyncData("profile", async () => {
+const { data: profile, refresh } = await useAsyncData<
+  Database["public"]["Tables"]["profiles"]["Row"] | null
+>("profile", async () => {
   const userId = user.value?.id || user.value?.sub;
+  if (!userId) return null;
   const { data } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", userId)
     .single();
-  return data;
+  return data as Database["public"]["Tables"]["profiles"]["Row"] | null;
 });
 
 // Recipes functionality removed as table does not exist
@@ -48,7 +56,9 @@ const toggleSensitivity = async (sensitivity: string) => {
   let newSensitivities: string[];
 
   if (currentSensitivities.includes(sensitivity)) {
-    newSensitivities = currentSensitivities.filter((s) => s !== sensitivity);
+    newSensitivities = currentSensitivities.filter(
+      (s: string) => s !== sensitivity,
+    );
   } else {
     newSensitivities = [...currentSensitivities, sensitivity];
   }
@@ -157,7 +167,30 @@ const saveProfile = async () => {
 
 const handleSignOut = async () => {
   await supabase.auth.signOut();
-  navigateTo("/login");
+  const localePath = useLocalePath();
+  navigateTo(localePath("/login"));
+};
+
+const updateLanguage = async (lang: string) => {
+  const typedLang = lang as "en" | "hu" | "sr";
+  i18nCookie.value = lang;
+  setLocale(typedLang);
+  try {
+    const userId = user.value?.id || user.value?.sub;
+    if (userId && userId !== "undefined") {
+      await supabase
+        .from("profiles")
+        .update({ preferred_language: lang })
+        .eq("id", userId);
+
+      // Update local profile data if it exists
+      if (profile.value) {
+        profile.value.preferred_language = lang;
+      }
+    }
+  } catch (error) {
+    console.error("Error updating language preference:", error);
+  }
 };
 </script>
 
@@ -324,6 +357,46 @@ const handleSignOut = async () => {
           <div class="space-y-3">
             <p v-if="profile?.bio" class="text-gray-600">{{ profile.bio }}</p>
             <p v-else class="text-gray-400 italic">{{ $t("no_bio") }}</p>
+          </div>
+        </div>
+
+        <!-- Language Settings -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+          <h3 class="font-bold text-lg mb-4">{{ $t("language_settings") }}</h3>
+          <div class="flex items-center gap-4">
+            <label class="flex items-center cursor-pointer gap-2">
+              <input
+                type="radio"
+                name="language"
+                value="en"
+                :checked="locale === 'en'"
+                @change="updateLanguage('en')"
+                class="w-4 h-4 text-black focus:ring-black accent-black"
+              />
+              <span class="text-gray-700">EN</span>
+            </label>
+            <label class="flex items-center cursor-pointer gap-2">
+              <input
+                type="radio"
+                name="language"
+                value="hu"
+                :checked="locale === 'hu'"
+                @change="updateLanguage('hu')"
+                class="w-4 h-4 text-black focus:ring-black accent-black"
+              />
+              <span class="text-gray-700">HU</span>
+            </label>
+            <label class="flex items-center cursor-pointer gap-2">
+              <input
+                type="radio"
+                name="language"
+                value="sr"
+                :checked="locale === 'sr'"
+                @change="updateLanguage('sr')"
+                class="w-4 h-4 text-black focus:ring-black accent-black"
+              />
+              <span class="text-gray-700">SR</span>
+            </label>
           </div>
         </div>
 

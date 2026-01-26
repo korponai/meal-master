@@ -6,30 +6,68 @@ definePageMeta({
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const localePath = useLocalePath();
-const { t } = useI18n();
+const { t, setLocale } = useI18n();
 
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
 const errorMsg = ref("");
 
-// Redirect if already logged in
-watchEffect(() => {
-  if (user.value) {
-    navigateTo(localePath("/recipes"));
-  }
+const i18nCookie = useCookie("i18n_redirected", {
+  maxAge: 60 * 60 * 24 * 365,
+  path: "/",
 });
+
+// Redirect if already logged in (but not during login submission flow)
+watch(
+  user,
+  (newUser) => {
+    if (newUser && !isLoading.value) {
+      navigateTo(localePath("/recipes"));
+    }
+  },
+  { immediate: true },
+);
 
 const handleLogin = async () => {
   isLoading.value = true;
   errorMsg.value = "";
   try {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
       email: email.value,
       password: password.value,
     });
     if (error) throw error;
-    // The watchEffect will handle the redirect once user.value is updated
+
+    // Explicitly handle language preference before navigation
+    if (authData.user) {
+      try {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("preferred_language")
+          .eq("id", authData.user.id)
+          .single();
+
+        if (
+          profile?.preferred_language &&
+          ["en", "hu", "sr"].includes(profile.preferred_language)
+        ) {
+          // Update the cookie using the hoisted composable reference (or create one if strictly needed here, but better hoisted)
+          // In Nuxt, useCookie is a composable that returns a ref. We should call it at setup.
+          // However, we want to SET it.
+          // Correct pattern: define const cookie = useCookie(...) at top, then cookie.value = ...
+          i18nCookie.value = profile.preferred_language;
+          await setLocale(profile.preferred_language as any);
+        }
+      } catch (langError) {
+        console.error(
+          "Error fetching language preference on login:",
+          langError,
+        );
+      }
+    }
+
+    navigateTo(localePath("/recipes"));
   } catch (error: any) {
     errorMsg.value = error.message;
     isLoading.value = false;

@@ -9,7 +9,7 @@ const isActive = (path: string) => route.path.startsWith(path);
 
 const handleSignOut = async () => {
   await supabase.auth.signOut();
-  navigateTo("/login");
+  navigateTo(localePath("/login"));
 };
 
 const { openDonationModal } = useDonation();
@@ -115,39 +115,6 @@ const { openDonationModal } = useDonation();
               class="text-sm font-medium text-gray-500 hover:text-black"
             >
               {{ $t("logout") }}
-            </button>
-          </div>
-
-          <!-- Locale Switcher (Minimal) -->
-          <div class="hidden lg:flex gap-2 text-xs ml-4">
-            <button
-              @click="setLocale('en')"
-              :class="{
-                'font-bold text-black': locale === 'en',
-                'text-gray-400': locale !== 'en',
-              }"
-            >
-              EN
-            </button>
-            <span class="text-gray-300">|</span>
-            <button
-              @click="setLocale('hu')"
-              :class="{
-                'font-bold text-black': locale === 'hu',
-                'text-gray-400': locale !== 'hu',
-              }"
-            >
-              HU
-            </button>
-            <span class="text-gray-300">|</span>
-            <button
-              @click="setLocale('sr')"
-              :class="{
-                'font-bold text-black': locale === 'sr',
-                'text-gray-400': locale !== 'sr',
-              }"
-            >
-              SR
             </button>
           </div>
         </div>
