@@ -155,8 +155,8 @@ const { openDonationModal } = useDonation();
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow">
-      <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    <main class="flex-grow overflow-hidden flex flex-col">
+      <div class="max-w-7xl mx-auto px-4 md:px-8 py-8 flex-1 min-h-0 w-full">
         <slot />
       </div>
     </main>

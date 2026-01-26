@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="h-[calc(100vh-theme('spacing.32'))]">
+  <div class="min-h-0 flex-1">
     <MealsWeeklyCalendar />
   </div>
 </template>

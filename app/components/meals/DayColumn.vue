@@ -61,7 +61,7 @@ const totalCalories = computed(() => {
 
 <template>
   <div
-    class="flex-1 min-w-[140px] md:min-w-0 flex flex-col h-full border-r border-gray-100 last:border-r-0"
+    class="flex flex-col h-full border-r border-gray-100 last:border-r-0"
   >
     <div
       :class="[
@@ -105,7 +105,7 @@ const totalCalories = computed(() => {
         </div>
       </div>
     </div>
-      <div class="p-2 border-t border-gray-100 bg-gray-50 text-center text-xs font-medium text-gray-600">
+      <div class="mt-auto p-2 border-t border-gray-100 bg-gray-50 text-center text-xs font-medium text-gray-600">
         Total: {{ totalCalories }} kcal
       </div>
   </div>

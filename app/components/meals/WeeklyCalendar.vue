@@ -214,7 +214,7 @@ const generateShoppingList = async () => {
 
     <!-- Calendar Grid -->
     <div
-      class="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm overflow-x-auto flex min-h-[600px]"
+      class="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm overflow-x-auto relative"
     >
       <div
         v-if="loading"
@@ -222,14 +222,17 @@ const generateShoppingList = async () => {
       >
         <span class="text-sm font-medium text-gray-500">Loading...</span>
       </div>
-      <DayColumn
-        v-for="date in weekDays"
-        :key="date"
-        :date="date"
-        :meals="getMealsForDate(date)"
-        @add-meal="openAddModal($event, date)"
-        @delete-meal="handleDeleteMeal"
-      />
+      <!-- Inner grid wrapper - uses CSS Grid for equal height columns -->
+      <div class="grid grid-cols-7 min-w-[980px] h-full">
+        <DayColumn
+          v-for="date in weekDays"
+          :key="date"
+          :date="date"
+          :meals="getMealsForDate(date)"
+          @add-meal="openAddModal($event, date)"
+          @delete-meal="handleDeleteMeal"
+        />
+      </div>
     </div>
 
     <AddMealModal
