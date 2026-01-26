@@ -112,7 +112,7 @@ It is intended to be used as **context for AI-assisted development (context engi
 
 ### Iteration 7 – Restrict Registration
 
-**Status:** In Progress
+**Status:** Done
 **Goal:** Restrict new user registrations based on environment variable.
 
 **Deliverables:**
@@ -120,3 +120,31 @@ It is intended to be used as **context for AI-assisted development (context engi
 - `ENABLE_NEW_REGISTRATION` environment variable
 - Conditional rendering of registration form
 - Message for disabled registration
+
+### Iteration 8 – Meal Planner Improvements
+
+**Status:** Done
+**Goal:** Filter recipes in add dialog and summarize daily calories.
+
+**Deliverables:**
+
+- Filter recipes in "Add Meal" dialog by meal category (Breakfast, Lunch, Dinner, Snack)
+- Summarize daily calories in the weekly planner view
+- Display total calorie count per day
+
+### Iteration 9 – AI Generated Shopping List
+
+**Status:** In Progress
+**Goal:** AI-assisted shopping list generation based on weekly meal planning.
+
+**Deliverables:**
+
+- AI integration script `generate-weekly-shopping-list.post.ts`
+- Shopping list database tables
+- "Generate Shopping List" button on Meal Plan page
+- Reworked Shopping List page (`/meals/shoppinglist`)
+- Ingredient deduplication and aggregation
+- AI-powered categorization
+- Progress tracking and management
+
+

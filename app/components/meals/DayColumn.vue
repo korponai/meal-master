@@ -42,6 +42,21 @@ const getMealsByType = (type: MealType) => {
 
 const dateObj = computed(() => new Date(props.date));
 const isCurrentDay = computed(() => isToday(dateObj.value));
+
+const totalCalories = computed(() => {
+  return props.meals.reduce((sum, meal) => {
+    // Check if recipe and nutrients exist
+    const recipe = meal.recipes;
+    if (!recipe || !recipe.nutrients) return sum;
+
+    // Nutrients is Json type, so we cast/check safely
+    const nutrients = recipe.nutrients as Record<string, unknown> | null;
+    if (!nutrients || typeof nutrients.calories === "undefined") return sum;
+
+    const cals = Number(nutrients.calories);
+    return sum + (isNaN(cals) ? 0 : cals);
+  }, 0);
+});
 </script>
 
 <template>
@@ -60,6 +75,9 @@ const isCurrentDay = computed(() => isToday(dateObj.value));
       <div class="text-lg font-bold text-gray-900 capitalize">
         {{ format(dateObj, "d MMM", { locale: getDateLocale }) }}
       </div>
+        <div class="mt-1 text-xs font-semibold text-gray-400">
+            {{ totalCalories > 0 ? totalCalories + ' kcal' : '-' }}
+        </div>
     </div>
 
     <div class="flex-1 overflow-y-auto p-2 space-y-4">
@@ -87,5 +105,8 @@ const isCurrentDay = computed(() => isToday(dateObj.value));
         </div>
       </div>
     </div>
+      <div class="p-2 border-t border-gray-100 bg-gray-50 text-center text-xs font-medium text-gray-600">
+        Total: {{ totalCalories }} kcal
+      </div>
   </div>
 </template>

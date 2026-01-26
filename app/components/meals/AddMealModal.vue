@@ -26,11 +26,39 @@ const { data: recipes, refresh } = await useAsyncData(
       console.warn("No valid user ID found, returning empty list.");
       return [];
     }
-    const { data, error } = await supabase
+
+    // Map mealType to category
+    let categoryFilter: string | null = null;
+    switch (props.mealType) {
+      case "breakfast":
+        categoryFilter = "Breakfast";
+        break;
+      case "lunch":
+        categoryFilter = "Lunch";
+        break;
+      case "dinner":
+        categoryFilter = "Dinner";
+        break;
+      case "morning_snack":
+      case "afternoon_snack":
+      case "evening_snack":
+        categoryFilter = "Snack";
+        break;
+    }
+
+    let query = supabase
       .from("recipes")
-      .select("id, title, image_url")
+      // Start with selecting basic fields
+      .select("id, title, image_url, recipe_categories!inner(category)")
       .eq("user_id", userId)
       .order("title");
+
+    // Apply category filter if we have a mapping
+    if (categoryFilter) {
+      query = query.eq("recipe_categories.category", categoryFilter);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error("Error fetching recipes:", error);
@@ -53,6 +81,16 @@ watch(
       refresh();
     }
   },
+);
+
+// Watch mealType to refresh when opening for different meal types
+watch(
+  () => props.mealType,
+  () => {
+    if (props.isOpen) {
+      refresh();
+    }
+  }
 );
 
 const filteredRecipes = computed(() => {
