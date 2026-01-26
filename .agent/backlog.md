@@ -134,7 +134,7 @@ It is intended to be used as **context for AI-assisted development (context engi
 
 ### Iteration 9 – AI Generated Shopping List
 
-**Status:** In Progress
+**Status:** Done
 **Goal:** AI-assisted shopping list generation based on weekly meal planning.
 
 **Deliverables:**

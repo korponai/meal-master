@@ -217,30 +217,33 @@ export type Database = {
           id: string;
           ingredient_id: string | null;
           is_checked: boolean | null;
-          item_name: string;
+          name: string;
           quantity: number | null;
           unit: string | null;
           user_id: string;
+          category: string | null;
         };
         Insert: {
           created_at?: string | null;
           id?: string;
           ingredient_id?: string | null;
           is_checked?: boolean | null;
-          item_name: string;
+          name: string;
           quantity?: number | null;
           unit?: string | null;
           user_id: string;
+          category?: string | null;
         };
         Update: {
           created_at?: string | null;
           id?: string;
           ingredient_id?: string | null;
           is_checked?: boolean | null;
-          item_name?: string;
+          name?: string;
           quantity?: number | null;
           unit?: string | null;
           user_id?: string;
+          category?: string | null;
         };
         Relationships: [
           {

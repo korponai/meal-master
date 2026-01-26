@@ -113,6 +113,29 @@ const handleDeleteMeal = async (id: string) => {
     alert("Failed to delete meal");
   }
 };
+
+const generatingList = ref(false);
+const router = useRouter();
+
+const generateShoppingList = async () => {
+  generatingList.value = true;
+  try {
+    const start = format(weekStart.value, "yyyy-MM-dd");
+    const end = format(weekEnd.value, "yyyy-MM-dd");
+    
+    await $fetch('/api/ai/generate-shopping-list', {
+        method: 'POST',
+        body: { startDate: start, endDate: end }
+    });
+
+    await router.push('/meals/shoppinglist');
+  } catch (error) {
+    console.error("Failed to generate list:", error);
+    alert("Failed to generate shopping list. Please try again.");
+  } finally {
+    generatingList.value = false;
+  }
+};
 </script>
 
 <template>
@@ -123,6 +146,17 @@ const handleDeleteMeal = async (id: string) => {
         <h2 class="text-xl font-bold text-gray-900">
           {{ $t("meal_planner_title") }}
         </h2>
+        
+        <button
+          @click="generateShoppingList"
+          :disabled="generatingList || meals.length === 0"
+          class="flex items-center gap-2 px-3 py-1.5 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 disabled:opacity-50 transition-colors"
+        >
+          <span v-if="generatingList" class="animate-spin">⏳</span>
+          <span v-else>✨</span>
+          Generate Shopping List
+        </button>
+
         <div
           class="flex items-center gap-2 bg-white rounded-lg shadow-sm border border-gray-200 p-1"
         >
