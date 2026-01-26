@@ -51,9 +51,18 @@ const totalCalories = computed(() => {
 
     // Nutrients is Json type, so we cast/check safely
     const nutrients = recipe.nutrients as Record<string, unknown> | null;
-    if (!nutrients || typeof nutrients.calories === "undefined") return sum;
+    if (!nutrients || !nutrients.calories) return sum;
 
-    const cals = Number(nutrients.calories);
+    // Handle both number (legacy/simple) and object { value, unit } formats
+    const caloriesData = nutrients.calories as number | { value: number | null } | null;
+    let cals = 0;
+
+    if (typeof caloriesData === 'number') {
+        cals = caloriesData;
+    } else if (caloriesData && typeof caloriesData === 'object' && 'value' in caloriesData) {
+        cals = Number(caloriesData.value);
+    }
+
     return sum + (isNaN(cals) ? 0 : cals);
   }, 0);
 });
