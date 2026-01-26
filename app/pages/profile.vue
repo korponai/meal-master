@@ -42,8 +42,9 @@ const { data: recipes } = await useAsyncData("profile-recipes", async () => {
 const isEditing = ref(false);
 const editForm = ref({
   full_name: "",
-  // bio: "", // Not supported
+  bio: "",
   avatar_url: "",
+  daily_calorie_maximum: null as number | null,
 });
 const uploading = ref(false);
 
@@ -88,8 +89,9 @@ const toggleSensitivity = async (sensitivity: string) => {
 const startEdit = () => {
   editForm.value = {
     full_name: profile.value?.full_name || "",
-    // bio: profile.value?.bio || "",
+    bio: profile.value?.bio || "",
     avatar_url: profile.value?.avatar_url || "",
+    daily_calorie_maximum: profile.value?.daily_calorie_maximum || null,
   };
   isEditing.value = true;
 };
@@ -320,7 +322,18 @@ const updateLanguage = async (lang: string) => {
               class="w-full border rounded-xl px-4 py-2"
             />
           </div>
-          <!--
+          <div>
+            <label class="block text-sm font-medium mb-1"
+              >{{ $t("daily_calorie_maximum") }} ({{ $t("unit_kcal") }})</label
+            >
+            <input
+              v-model.number="editForm.daily_calorie_maximum"
+              type="number"
+              class="w-full border rounded-xl px-4 py-2"
+              placeholder="e.g. 2000"
+            />
+          </div>
+
           <div>
             <label class="block text-sm font-medium mb-1">Bio</label>
             <textarea
@@ -329,7 +342,6 @@ const updateLanguage = async (lang: string) => {
               rows="3"
             ></textarea>
           </div>
-          -->
         </div>
         <div class="flex justify-end gap-3 mt-6">
           <button
@@ -357,6 +369,19 @@ const updateLanguage = async (lang: string) => {
           <div class="space-y-3">
             <p v-if="profile?.bio" class="text-gray-600">{{ profile.bio }}</p>
             <p v-else class="text-gray-400 italic">{{ $t("no_bio") }}</p>
+
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <p class="text-sm font-medium text-gray-500 mb-1">
+                {{ $t("daily_calorie_maximum") }}
+              </p>
+              <p class="text-lg font-bold text-gray-900">
+                {{
+                  profile?.daily_calorie_maximum
+                    ? profile.daily_calorie_maximum + " " + $t("unit_kcal")
+                    : "-"
+                }}
+              </p>
+            </div>
           </div>
         </div>
 

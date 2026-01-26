@@ -12,9 +12,11 @@ import DayColumn from "./DayColumn.vue";
 import AddMealModal from "./AddMealModal.vue";
 
 import type { MealType, MealPlan } from "../../types/meal-plan";
+import type { Database } from "@/types/database.types";
 
 const { locale } = useI18n();
 const { fetchMealPlans, addMealPlan, deleteMealPlan } = useMealPlan();
+const supabase = useSupabaseClient<Database>();
 
 const getDateLocale = computed(() => {
   switch (locale.value) {
@@ -48,6 +50,7 @@ const weekDays = computed(() => {
 
 const meals = ref<MealPlan[]>([]);
 const loading = ref(false);
+const dailyCalorieMaximum = ref<number | null>(null);
 
 const loadMeals = async () => {
   loading.value = true;
@@ -62,9 +65,24 @@ const loadMeals = async () => {
 
 const user = useSupabaseUser();
 
+const fetchProfile = async () => {
+  if (!user.value) return;
+  const userId = user.value.id || user.value.sub;
+  const { data } = await supabase
+    .from("profiles")
+    .select("daily_calorie_maximum")
+    .eq("id", userId)
+    .single();
+
+  if (data) {
+    dailyCalorieMaximum.value = data.daily_calorie_maximum;
+  }
+};
+
 onMounted(() => {
   if (user.value) {
     loadMeals();
+    fetchProfile();
   }
 });
 
@@ -72,6 +90,7 @@ watch(weekStart, loadMeals);
 watch(user, (newUser) => {
   if (newUser) {
     loadMeals();
+    fetchProfile();
   }
 });
 
@@ -122,13 +141,13 @@ const generateShoppingList = async () => {
   try {
     const start = format(weekStart.value, "yyyy-MM-dd");
     const end = format(weekEnd.value, "yyyy-MM-dd");
-    
-    await $fetch('/api/ai/generate-shopping-list', {
-        method: 'POST',
-        body: { startDate: start, endDate: end }
+
+    await $fetch("/api/ai/generate-shopping-list", {
+      method: "POST",
+      body: { startDate: start, endDate: end },
     });
 
-    await router.push('/meals/shoppinglist');
+    await router.push("/meals/shoppinglist");
   } catch (error) {
     console.error("Failed to generate list:", error);
     alert("Failed to generate shopping list. Please try again.");
@@ -146,7 +165,7 @@ const generateShoppingList = async () => {
         <h2 class="text-xl font-bold text-gray-900">
           {{ $t("meal_planner_title") }}
         </h2>
-        
+
         <button
           @click="generateShoppingList"
           :disabled="generatingList || meals.length === 0"
@@ -229,6 +248,7 @@ const generateShoppingList = async () => {
           :key="date"
           :date="date"
           :meals="getMealsForDate(date)"
+          :dailyCalorieMaximum="dailyCalorieMaximum"
           @add-meal="openAddModal($event, date)"
           @delete-meal="handleDeleteMeal"
         />

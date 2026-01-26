@@ -151,6 +151,7 @@
   "ai_custom_prompt_placeholder": "pl. alacsony szénhidráttartalmú vacsora, olasz tészta, gyors reggeli...",
   "generate_recipe": "Recept generálása",
   "generate_image": "Kép generálása",
+  "generate_ai_image": "AI kép generálása",
   "regenerate": "Újragenerálás",
   "generating_recipe": "Recept generálása...",
   "generating_image": "Kép generálása...",
@@ -192,5 +193,7 @@
   "shopping_list_category_household": "Háztartás",
   "shopping_list_category_other": "Egyéb",
   "shopping_list_confirm_uncheck_all": "Biztosan ki szeretné venni az összes tételt a pipálásból?",
-  "shopping_list_confirm_check_all": "Biztosan ki szeretne pipálni minden tételt?"
+  "shopping_list_confirm_check_all": "Biztosan ki szeretne pipálni minden tételt?",
+  "daily_calorie_maximum": "Napi Kalória Maximum",
+  "unit_kcal": "kcal"
 }

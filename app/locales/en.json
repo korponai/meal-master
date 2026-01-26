@@ -151,6 +151,7 @@
   "ai_custom_prompt_placeholder": "e.g., low-carb dinner, Italian pasta, quick breakfast...",
   "generate_recipe": "Generate Recipe",
   "generate_image": "Generate Image",
+  "generate_ai_image": "Generate AI Image",
   "regenerate": "Regenerate",
   "generating_recipe": "Generating recipe...",
   "generating_image": "Generating image...",
@@ -192,5 +193,7 @@
   "shopping_list_category_household": "Household",
   "shopping_list_category_other": "Other",
   "shopping_list_confirm_uncheck_all": "Are you sure you want to uncheck all items?",
-  "shopping_list_confirm_check_all": "Are you sure you want to check all items?"
+  "shopping_list_confirm_check_all": "Are you sure you want to check all items?",
+  "daily_calorie_maximum": "Daily Calorie Maximum",
+  "unit_kcal": "kcal"
 }

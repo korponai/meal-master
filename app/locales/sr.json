@@ -151,6 +151,7 @@
   "ai_custom_prompt_placeholder": "npr. večera sa malo ugljenih hidrata, italijanska pasta, brz doručak...",
   "generate_recipe": "Generiši recept",
   "generate_image": "Generiši sliku",
+  "generate_ai_image": "Generiši AI sliku",
   "regenerate": "Regeneriši",
   "generating_recipe": "Generisanje recepta...",
   "generating_image": "Generisanje slike...",
@@ -192,5 +193,7 @@
   "shopping_list_category_household": "Domaćinstvo",
   "shopping_list_category_other": "Ostalo",
   "shopping_list_confirm_uncheck_all": "Da li ste sigurni da želite da odznačite sve stavke?",
-  "shopping_list_confirm_check_all": "Da li ste sigurni da želite da označite sve stavke?"
+  "shopping_list_confirm_check_all": "Da li ste sigurni da želite da označite sve stavke?",
+  "daily_calorie_maximum": "Dnevni Maksimum Kalorija",
+  "unit_kcal": "kcal"
 }

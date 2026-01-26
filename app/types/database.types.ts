@@ -75,6 +75,7 @@ export type Database = {
           id: string;
           updated_at: string | null;
           preferred_language: string | null;
+          daily_calorie_maximum: number | null;
         };
         Insert: {
           avatar_url?: string | null;
@@ -85,6 +86,7 @@ export type Database = {
           id: string;
           updated_at?: string | null;
           preferred_language?: string | null;
+          daily_calorie_maximum?: number | null;
         };
         Update: {
           avatar_url?: string | null;
@@ -95,6 +97,7 @@ export type Database = {
           id?: string;
           updated_at?: string | null;
           preferred_language?: string | null;
+          daily_calorie_maximum?: number | null;
         };
         Relationships: [];
       };

@@ -7,6 +7,7 @@ import MealItem from "./MealItem.vue";
 const props = defineProps<{
   date: string; // YYYY-MM-DD
   meals: MealPlan[];
+  dailyCalorieMaximum?: number | null;
 }>();
 
 const emit = defineEmits<{
@@ -54,24 +55,34 @@ const totalCalories = computed(() => {
     if (!nutrients || !nutrients.calories) return sum;
 
     // Handle both number (legacy/simple) and object { value, unit } formats
-    const caloriesData = nutrients.calories as number | { value: number | null } | null;
+    const caloriesData = nutrients.calories as
+      | number
+      | { value: number | null }
+      | null;
     let cals = 0;
 
-    if (typeof caloriesData === 'number') {
-        cals = caloriesData;
-    } else if (caloriesData && typeof caloriesData === 'object' && 'value' in caloriesData) {
-        cals = Number(caloriesData.value);
+    if (typeof caloriesData === "number") {
+      cals = caloriesData;
+    } else if (
+      caloriesData &&
+      typeof caloriesData === "object" &&
+      "value" in caloriesData
+    ) {
+      cals = Number(caloriesData.value);
     }
 
     return sum + (isNaN(cals) ? 0 : cals);
   }, 0);
 });
+
+const isOverLimit = computed(() => {
+  if (!props.dailyCalorieMaximum) return false;
+  return totalCalories.value > props.dailyCalorieMaximum;
+});
 </script>
 
 <template>
-  <div
-    class="flex flex-col h-full border-r border-gray-100 last:border-r-0"
-  >
+  <div class="flex flex-col h-full border-r border-gray-100 last:border-r-0">
     <div
       :class="[
         'p-3 text-center border-b border-gray-100 sticky top-0 z-10',
@@ -84,9 +95,9 @@ const totalCalories = computed(() => {
       <div class="text-lg font-bold text-gray-900 capitalize">
         {{ format(dateObj, "d MMM", { locale: getDateLocale }) }}
       </div>
-        <div class="mt-1 text-xs font-semibold text-gray-400">
-            {{ totalCalories > 0 ? totalCalories + ' kcal' : '-' }}
-        </div>
+      <div class="mt-1 text-xs font-semibold text-gray-400">
+        {{ totalCalories > 0 ? totalCalories + " kcal" : "-" }}
+      </div>
     </div>
 
     <div class="flex-1 overflow-y-auto p-2 space-y-4">
@@ -114,8 +125,13 @@ const totalCalories = computed(() => {
         </div>
       </div>
     </div>
-      <div class="mt-auto p-2 border-t border-gray-100 bg-gray-50 text-center text-xs font-medium text-gray-600">
-        Total: {{ totalCalories }} kcal
-      </div>
+    <div
+      class="mt-auto p-2 border-t border-gray-100 text-center text-xs font-medium"
+      :class="
+        isOverLimit ? 'bg-red-100 text-red-800' : 'bg-gray-50 text-gray-600'
+      "
+    >
+      Total: {{ totalCalories }} kcal
+    </div>
   </div>
 </template>
