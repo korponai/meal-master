@@ -194,6 +194,8 @@
   "shopping_list_category_other": "Ostalo",
   "shopping_list_confirm_uncheck_all": "Da li ste sigurni da želite da odznačite sve stavke?",
   "shopping_list_confirm_check_all": "Da li ste sigurni da želite da označite sve stavke?",
+  "shopping_list_confirm_clear_old": "Stara nedeljana lista za kupovinu će biti obrisana. Da li želite da nastavite?",
+  "shopping_list_generate_error": "Generisanje liste za kupovinu nije uspelo. Pokušajte ponovo.",
   "daily_calorie_maximum": "Dnevni Maksimum Kalorija",
   "unit_kcal": "kcal"
 }

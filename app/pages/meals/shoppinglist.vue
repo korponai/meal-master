@@ -15,6 +15,41 @@ const isLoading = ref(false);
 
 type ShoppingListItem = Database['public']['Tables']['shopping_list_items']['Row'];
 
+// Unit localization mapping
+const unitLocaleKeyMap: Record<string, string> = {
+  'piece': 'unit_by_count',
+  'pieces': 'unit_by_count',
+  'teaspoon': 'unit_teaspoon',
+  'teaspoons': 'unit_teaspoon',
+  'tablespoon': 'unit_tablespoon',
+  'tablespoons': 'unit_tablespoon',
+  'cup': 'unit_cup',
+  'cups': 'unit_cup',
+  'pint': 'unit_pint',
+  'pints': 'unit_pint',
+  'milliliter': 'unit_milliliter',
+  'milliliters': 'unit_milliliter',
+  'ml': 'unit_milliliter',
+  'liter': 'unit_liter',
+  'liters': 'unit_liter',
+  'l': 'unit_liter',
+  'gram': 'unit_gram',
+  'grams': 'unit_gram',
+  'g': 'unit_gram',
+  'kilogram': 'unit_kilogram',
+  'kilograms': 'unit_kilogram',
+  'kg': 'unit_kilogram',
+  'pinch': 'unit_pinch',
+  'pinches': 'unit_pinch',
+};
+
+const localizeUnit = (unit: string | null): string => {
+  if (!unit) return '';
+  const normalized = unit.toLowerCase().trim();
+  const localeKey = unitLocaleKeyMap[normalized];
+  return localeKey ? t(localeKey) : unit;
+};
+
 const { data: items, refresh } = await useAsyncData<ShoppingListItem[]>("shopping-list", async () => {
     const userId = user.value?.id || user.value?.sub;
     const { data } = await supabase
@@ -29,6 +64,7 @@ const categories: Record<string, { icon: string, labelKey: string }> = {
     'Produce': { icon: '🥬', labelKey: 'shopping_list_category_produce' },
     'Dairy': { icon: '🥛', labelKey: 'shopping_list_category_dairy' },
     'Meat': { icon: '🥩', labelKey: 'shopping_list_category_meat' },
+    'Meats': { icon: '🥩', labelKey: 'shopping_list_category_meat' },
     'Bakery': { icon: '🍞', labelKey: 'shopping_list_category_bakery' },
     'Pantry': { icon: '🥫', labelKey: 'shopping_list_category_pantry' },
     'Frozen': { icon: '❄️', labelKey: 'shopping_list_category_frozen' },
@@ -177,7 +213,7 @@ const checkAll = async () => {
                                     {{ item.name }}
                                 </span>
                                 <span v-if="item.quantity" class="text-xs text-gray-500">
-                                    {{ item.quantity }} {{ item.unit }}
+                                    {{ item.quantity }} {{ localizeUnit(item.unit) }}
                                 </span>
                             </div>
                         </div>

@@ -194,6 +194,8 @@
   "shopping_list_category_other": "Other",
   "shopping_list_confirm_uncheck_all": "Are you sure you want to uncheck all items?",
   "shopping_list_confirm_check_all": "Are you sure you want to check all items?",
+  "shopping_list_confirm_clear_old": "The old weekly shopping list will be cleared. Do you want to continue?",
+  "shopping_list_generate_error": "Failed to generate shopping list. Please try again.",
   "daily_calorie_maximum": "Daily Calorie Maximum",
   "unit_kcal": "kcal"
 }

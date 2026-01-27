@@ -148,3 +148,31 @@ It is intended to be used as **context for AI-assisted development (context engi
 - Progress tracking and management
 
 
+
+### Iteration 10 – Open Recipe from Meal Planner
+
+**Status:** Done
+**Goal:** Open the recipe details from the Meal Planner when clicking on a recipe card.
+
+**Deliverables:**
+
+- Clickable recipe card in Meal Planner
+- Navigation to `/recipes/[id]`
+
+### Iteration 11 – Shopping List AI Generator Rework
+
+**Status:** Done
+**Goal:** Fix ingredient merging and partial ingredient detection in the shopping list generator.
+
+**Issues Fixed:**
+
+- AI was not reliably merging identical ingredients (e.g., "Chicken breast" appearing twice)
+- Partial ingredients like "egg white" were not being counted as whole eggs
+
+**Deliverables:**
+
+- Pre-aggregation logic in `generate-weekly-shopping-list.post.ts`
+- `normalizeIngredientName()` function for consistent name matching
+- `PARTIAL_INGREDIENT_MAP` for partial → whole ingredient conversion
+- Deterministic ingredient merging before AI processing
+- AI now only handles categorization (grouping logic preserved)

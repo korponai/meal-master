@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MealPlan } from "~/app/types/meal-plan";
+import type { MealPlan } from "~/types/meal-plan";
 
 defineProps<{
   meal: MealPlan;
@@ -14,7 +14,11 @@ const emit = defineEmits<{
   <div
     class="group relative bg-white rounded-lg shadow-sm border border-gray-100 p-2 hover:shadow-md transition-shadow"
   >
-    <div class="flex items-start gap-2">
+    <NuxtLink
+      v-if="meal.recipes?.id"
+      :to="`/recipes/${meal.recipes.id}`"
+      class="flex items-start gap-2 min-w-0"
+    >
       <img
         v-if="meal.recipes?.image_url"
         :src="meal.recipes.image_url"
@@ -22,8 +26,17 @@ const emit = defineEmits<{
         class="h-10 w-10 rounded object-cover flex-shrink-0 bg-gray-200"
       />
       <div class="min-w-0 flex-1">
-        <p class="text-xs font-medium text-gray-900 truncate">
+        <p
+          class="text-xs font-medium text-gray-900 truncate hover:text-green-600 transition-colors"
+        >
           {{ meal.recipes?.title || meal.custom_name || "Unknown Recipe" }}
+        </p>
+      </div>
+    </NuxtLink>
+    <div v-else class="flex items-start gap-2 min-w-0">
+      <div class="min-w-0 flex-1">
+        <p class="text-xs font-medium text-gray-900 truncate">
+          {{ meal.custom_name || "Unknown Item" }}
         </p>
       </div>
     </div>

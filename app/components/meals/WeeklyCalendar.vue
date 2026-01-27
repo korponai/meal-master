@@ -14,7 +14,7 @@ import AddMealModal from "./AddMealModal.vue";
 import type { MealType, MealPlan } from "../../types/meal-plan";
 import type { Database } from "@/types/database.types";
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const { fetchMealPlans, addMealPlan, deleteMealPlan } = useMealPlan();
 const supabase = useSupabaseClient<Database>();
 
@@ -137,12 +137,17 @@ const generatingList = ref(false);
 const router = useRouter();
 
 const generateShoppingList = async () => {
+  // Confirm with user that old list will be cleared
+  if (!confirm(t('shopping_list_confirm_clear_old'))) {
+    return;
+  }
+  
   generatingList.value = true;
   try {
     const start = format(weekStart.value, "yyyy-MM-dd");
     const end = format(weekEnd.value, "yyyy-MM-dd");
 
-    await $fetch("/api/ai/generate-shopping-list", {
+    await $fetch("/api/ai/generate-weekly-shopping-list", {
       method: "POST",
       body: { startDate: start, endDate: end },
     });
@@ -150,7 +155,7 @@ const generateShoppingList = async () => {
     await router.push("/meals/shoppinglist");
   } catch (error) {
     console.error("Failed to generate list:", error);
-    alert("Failed to generate shopping list. Please try again.");
+    alert(t('shopping_list_generate_error'));
   } finally {
     generatingList.value = false;
   }
