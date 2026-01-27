@@ -137,7 +137,12 @@ const { openDonationModal } = useDonation();
         <div class="flex gap-6">
           <a href="#" class="hover:text-white">{{ $t("about_us") }}</a>
           <a href="#" class="hover:text-white">{{ $t("contact") }}</a>
-          <a href="#" class="hover:text-white">{{ $t("privacy_policy") }}</a>
+          <NuxtLink
+            :to="localePath('/privacy-policy')"
+            class="hover:text-white"
+          >
+            {{ $t("privacy_policy") }}
+          </NuxtLink>
           <button
             @click="openDonationModal"
             class="hover:text-white font-semibold text-yellow-500"

@@ -156,9 +156,13 @@ const handleRegister = async () => {
         />
         <label for="terms" class="ml-2 block text-sm text-gray-900">
           {{ $t("agree_prefix") }}
-          <a href="#" class="font-medium text-black hover:underline">{{
-            $t("privacy_policy")
-          }}</a>
+          <NuxtLink
+            to="/privacy-policy"
+            class="font-medium text-black hover:underline"
+            target="_blank"
+          >
+            {{ $t("privacy_policy") }}
+          </NuxtLink>
         </label>
       </div>
 

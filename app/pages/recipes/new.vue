@@ -112,9 +112,11 @@ const handleSubmit = async (payload: {
         .insert(ingredientsToInsert);
 
       if (ingredientsError) {
-        // Rollback recipe? For now just throw
-        // await supabase.from("recipes").delete().eq("id", recipe.id);
-        throw ingredientsError;
+        // Rollback: Delete the recipe since ingredients failed
+        await supabase.from("recipes").delete().eq("id", recipeId);
+        throw new Error(
+          "Failed to save ingredients. Recipe creation rolled back.",
+        );
       }
     }
 

@@ -75,11 +75,14 @@ export default defineEventHandler(async (event) => {
     const recipe: GeneratedRecipe = JSON.parse(content);
 
     return { recipe };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error generating recipe:", error);
-    if (error.statusCode) {
+
+    // Handle H3 errors
+    if (typeof error === "object" && error !== null && "statusCode" in error) {
       throw error;
     }
+
     throw createError({
       statusCode: 500,
       message: "Failed to generate recipe",
