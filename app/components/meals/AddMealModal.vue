@@ -56,7 +56,9 @@ const { data: recipes, refresh } = await useAsyncData(
     // Apply category filter if we have a mapping
     // Include both the specific category AND Dessert category (desserts can be added to any meal)
     if (categoryFilter) {
-      query = query.or(`category.eq.${categoryFilter},category.eq.Dessert`, { referencedTable: 'recipe_categories' });
+      query = query.or(`category.eq.${categoryFilter},category.eq.Dessert`, {
+        referencedTable: "recipe_categories",
+      });
     }
 
     const { data, error } = await query;
@@ -91,7 +93,7 @@ watch(
     if (props.isOpen) {
       refresh();
     }
-  }
+  },
 );
 
 const filteredRecipes = computed(() => {
@@ -188,7 +190,14 @@ const handleClose = () => {
             >
               Img
             </div>
-            <span class="font-medium text-gray-900">{{ recipe.title }}</span>
+            <div class="flex-1">
+              <div class="font-medium text-gray-900">{{ recipe.title }}</div>
+              <div class="text-xs text-gray-500 mt-0.5">
+                {{
+                  recipe.recipe_categories.map((rc) => rc.category).join(", ")
+                }}
+              </div>
+            </div>
           </div>
 
           <div

@@ -7,7 +7,13 @@ import { ALL_SENSITIVITIES } from "@/utils/constants";
 
 const { t } = useI18n();
 
-const categories = ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert"] as const;
+const categories = [
+  "Breakfast",
+  "Lunch",
+  "Dinner",
+  "Snack",
+  "Dessert",
+] as const;
 const visibilities = ["public", "private"] as const;
 
 // Zod Schema
@@ -231,8 +237,7 @@ const validate = () => {
     if (!ingResult.success) {
       hasIngredientErrors = true;
       // Ideally show error per row, simpler for now:
-      errors.value["ingredients"] =
-        "validation_ingredients_incomplete";
+      errors.value["ingredients"] = "validation_ingredients_incomplete";
     }
   });
   if (ingredients.value.length === 0) {
@@ -387,7 +392,7 @@ const onSubmit = () => {
             v-else
             class="w-32 h-32 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400"
           >
-            <span class="text-xs">{{ $t('no_image') }}</span>
+            <span class="text-xs">{{ $t("no_image") }}</span>
           </div>
           <div class="space-y-3">
             <div>
@@ -398,7 +403,7 @@ const onSubmit = () => {
                 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
               />
               <p class="mt-1 text-xs text-gray-500">
-                {{ $t('image_upload_hint') }}
+                {{ $t("image_upload_hint") }}
               </p>
             </div>
 
@@ -657,16 +662,11 @@ const onSubmit = () => {
           type="button"
           @click="generateNutrients"
           :disabled="isGeneratingNutrients"
-          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors"
-          :class="[
-            form.nutrients
-              ? 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
-              : 'bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100',
-          ]"
+          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 transition-all shadow-sm"
         >
           <svg
             v-if="isGeneratingNutrients"
-            class="animate-spin h-4 w-4"
+            class="animate-spin h-4 w-4 text-white"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -685,21 +685,7 @@ const onSubmit = () => {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <svg
-            v-else
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
+          <span v-else>✨</span>
           {{
             isGeneratingNutrients
               ? $t("generating_nutrients")
