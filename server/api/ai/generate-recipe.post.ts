@@ -8,7 +8,7 @@ const requestSchema = z.object({
 interface GeneratedRecipe {
   title: string;
   description: string;
-  category: "Breakfast" | "Lunch" | "Dinner" | "Snack";
+  category: "Breakfast" | "Lunch" | "Dinner" | "Snack" | "Dessert";
   ingredients: { name: string; quantity: number; unit: string }[];
   allergens: string[];
 }
@@ -130,7 +130,7 @@ Please consider this request when generating the recipe. The recipe's theme and 
   "allergens": ["gluten", "egg"]
 }
 
-**Valid categories:** Breakfast, Lunch, Dinner, Snack
+**Valid categories:** Breakfast, Lunch, Dinner, Snack, Dessert
 **Valid units:** teaspoon, tablespoon, cup, pint, milliliter, liter, gram, kilogram, pinch, by_count
 **Valid allergens:** lactose, gluten, egg, peanut, soy, fish, milk_protein, histamine, fructose`;
 
