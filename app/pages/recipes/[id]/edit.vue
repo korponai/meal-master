@@ -185,7 +185,7 @@ const handleSubmit = async (payload: {
       />
     </div>
     <div v-else class="text-center py-12">
-      <p>Loading...</p>
+      <p>{{ $t('loading_text') }}</p>
     </div>
   </div>
 </template>

@@ -5,7 +5,7 @@ import { ALL_SENSITIVITIES } from "@/utils/constants";
 interface GeneratedRecipe {
   title: string;
   description: string;
-  category: "Breakfast" | "Lunch" | "Dinner" | "Snack";
+  category: "Breakfast" | "Lunch" | "Dinner" | "Snack" | "Dessert";
   ingredients: { name: string; quantity: number; unit: string }[];
   allergens: string[];
 }

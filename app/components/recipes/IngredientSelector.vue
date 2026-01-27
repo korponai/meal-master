@@ -3,6 +3,9 @@ import type { Database } from "@/types/database.types";
 
 type Ingredient = Database["public"]["Tables"]["ingredients"]["Row"];
 
+
+const { t } = useI18n();
+
 const props = defineProps<{
   modelValue?: Ingredient;
 }>();
@@ -50,7 +53,7 @@ const handleCreate = async () => {
                      selectIngredient(existing);
                  }
              } else {
-                 alert('Error creating ingredient: ' + error.message);
+                 alert(t('error_creating_ingredient') + error.message);
              }
         } else if (data) {
             selectIngredient(data);
@@ -101,7 +104,7 @@ const handleBlur = () => {
         @input="handleInput"
         @focus="showOptions = true"
         @blur="handleBlur"
-        placeholder="Search ingredient..."
+        :placeholder="$t('search_ingredient_placeholder')"
       />
       <div v-if="modelValue" class="absolute inset-y-0 right-0 flex items-center pr-2">
           <button @click="$emit('update:modelValue', null as any)" class="text-gray-400 hover:text-gray-500">✕</button>
@@ -117,9 +120,9 @@ const handleBlur = () => {
         class="relative cursor-pointer select-none py-2 px-4 text-gray-700 hover:bg-indigo-50"
         @click="handleCreate"
       >
-       <span>Nothing found.</span>
+        <span>{{ $t('nothing_found') }}</span>
        <span class="ml-2 text-indigo-600 font-semibold">
-         {{ isCreating ? 'Creating...' : `Create "${query}"` }}
+          {{ isCreating ? $t('creating') : $t('create_item', { item: query }) }}
        </span>
       </div>
 

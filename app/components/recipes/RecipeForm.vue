@@ -5,18 +5,20 @@ import type { RecipeIngredient } from "./RecipeIngredientRow.vue";
 import RecipesRecipeIngredientRow from "./RecipeIngredientRow.vue"; // Explicit import if auto-import fails or for clarity
 import { ALL_SENSITIVITIES } from "@/utils/constants";
 
-const categories = ["Breakfast", "Lunch", "Dinner", "Snack"] as const;
+const { t } = useI18n();
+
+const categories = ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert"] as const;
 const visibilities = ["public", "private"] as const;
 
 // Zod Schema
 const ingredientSchema = z
   .object({
     ingredient: z.object({ id: z.string(), name: z.string() }).nullable(),
-    quantity: z.number().min(0, "Quantity must be positive"),
-    unit: z.string().min(1, "Unit is required"),
+    quantity: z.number().min(0, "validation_quantity_positive"),
+    unit: z.string().min(1, "validation_unit_required"),
   })
   .refine((data) => data.ingredient !== null, {
-    message: "Ingredient is required",
+    message: "validation_ingredient_required",
     path: ["ingredient"],
   });
 
@@ -37,8 +39,8 @@ interface NutritionData {
 }
 
 const recipeSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
+  title: z.string().min(3, "validation_title_min_length"),
+  description: z.string().min(10, "validation_description_min_length"),
   categories: z.array(z.enum(categories)).min(1, "categories_required_error"),
   visibility: z.enum(visibilities),
   experience: z.string().optional(),
@@ -230,11 +232,11 @@ const validate = () => {
       hasIngredientErrors = true;
       // Ideally show error per row, simpler for now:
       errors.value["ingredients"] =
-        "Please ensure all ingredients have a name, quantity, and unit.";
+        "validation_ingredients_incomplete";
     }
   });
   if (ingredients.value.length === 0) {
-    errors.value["ingredients"] = "At least one ingredient is required.";
+    errors.value["ingredients"] = "validation_ingredients_required";
     hasIngredientErrors = true;
   }
 
@@ -244,7 +246,7 @@ const validate = () => {
 const generateNutrients = async () => {
   // Validate that we have title and ingredients
   if (!form.title || form.title.length < 3) {
-    nutrientsError.value = "Please enter a recipe title first";
+    nutrientsError.value = "validation_enter_title_first";
     return;
   }
 
@@ -253,7 +255,7 @@ const generateNutrients = async () => {
   );
 
   if (validIngredients.length === 0) {
-    nutrientsError.value = "Please add ingredients first";
+    nutrientsError.value = "validation_add_ingredients_first";
     return;
   }
 
@@ -293,7 +295,7 @@ const imageGenerationError = ref<string | null>(null);
 
 const generateImage = async () => {
   if (!form.title || form.title.length < 3) {
-    imageGenerationError.value = "Please enter a recipe title first";
+    imageGenerationError.value = "validation_enter_title_first";
     return;
   }
 
@@ -385,7 +387,7 @@ const onSubmit = () => {
             v-else
             class="w-32 h-32 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400"
           >
-            <span class="text-xs">No image</span>
+            <span class="text-xs">{{ $t('no_image') }}</span>
           </div>
           <div class="space-y-3">
             <div>
@@ -396,7 +398,7 @@ const onSubmit = () => {
                 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
               />
               <p class="mt-1 text-xs text-gray-500">
-                PNG, JPG, adjust up to 5MB
+                {{ $t('image_upload_hint') }}
               </p>
             </div>
 
@@ -437,7 +439,7 @@ const onSubmit = () => {
               }}
             </button>
             <p v-if="imageGenerationError" class="text-xs text-red-600">
-              {{ imageGenerationError }}
+              {{ $t(imageGenerationError) }}
             </p>
           </div>
         </div>
@@ -457,7 +459,7 @@ const onSubmit = () => {
           :placeholder="$t('placeholder_recipe_title')"
         />
         <p v-if="errors.title" class="mt-1 text-sm text-red-600">
-          {{ errors.title }}
+          {{ $t(errors.title) }}
         </p>
       </div>
 
@@ -472,7 +474,7 @@ const onSubmit = () => {
           :placeholder="$t('placeholder_recipe_description')"
         ></textarea>
         <p v-if="errors.description" class="mt-1 text-sm text-red-600">
-          {{ errors.description }}
+          {{ $t(errors.description) }}
         </p>
       </div>
 
@@ -480,7 +482,7 @@ const onSubmit = () => {
         <label class="block text-sm font-medium text-gray-700 mb-2">{{
           $t("recipe_category_label")
         }}</label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
           <div
             v-for="cat in categories"
             :key="cat"
@@ -577,7 +579,7 @@ const onSubmit = () => {
         />
       </div>
       <p v-if="errors.ingredients" class="mt-1 text-sm text-red-600">
-        {{ errors.ingredients }}
+        {{ $t(errors.ingredients) }}
       </p>
     </div>
 
@@ -716,7 +718,7 @@ const onSubmit = () => {
 
       <!-- Error message -->
       <p v-if="nutrientsError" class="text-sm text-red-600">
-        {{ nutrientsError }}
+        {{ $t(nutrientsError) }}
       </p>
 
       <!-- Hint when no nutrients -->

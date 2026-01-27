@@ -16,7 +16,7 @@ const { data: recipes, refresh } = await useAsyncData("recipes", async () => {
   return data || [];
 });
 
-const categories = ["Breakfast", "Lunch", "Dinner", "Snack"];
+const categories = ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert"];
 
 // Group recipes by category - a recipe can appear in multiple groups
 const groupedRecipes = computed(() => {
@@ -42,7 +42,7 @@ const handleDelete = async (id: string) => {
 <template>
   <div class="space-y-12">
     <div class="flex items-center justify-between">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Recipes</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ $t('recipes') }}</h1>
       <div class="flex items-center gap-3">
         <NuxtLink
           to="/recipes/ai-generate"
@@ -64,7 +64,7 @@ const handleDelete = async (id: string) => {
         <h2
           class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4"
         >
-          {{ category }}
+          {{ $t("category_" + category.toLowerCase()) }}
         </h2>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"

@@ -54,8 +54,9 @@ const { data: recipes, refresh } = await useAsyncData(
       .order("title");
 
     // Apply category filter if we have a mapping
+    // Include both the specific category AND Dessert category (desserts can be added to any meal)
     if (categoryFilter) {
-      query = query.eq("recipe_categories.category", categoryFilter);
+      query = query.or(`category.eq.${categoryFilter},category.eq.Dessert`, { referencedTable: 'recipe_categories' });
     }
 
     const { data, error } = await query;
