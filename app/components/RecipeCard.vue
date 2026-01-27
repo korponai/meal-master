@@ -4,8 +4,10 @@ const props = defineProps<{
     id: string;
     title: string;
     image_url: string | null;
+    user_id: string;
     recipe_categories?: { category: string }[];
   };
+  userId?: string;
 }>();
 
 const { t, te } = useI18n();
@@ -19,6 +21,18 @@ const navigateToEdit = () => {
     .push(`/recipes/${props.recipe.id}/edit`)
     .catch((err) => console.error("Navigation error:", err));
 };
+
+// Check if current user owns this recipe
+const isOwner = computed(() => {
+  const owns = props.userId && props.recipe.user_id === props.userId;
+  console.log("RecipeCard ownership check:", {
+    recipeId: props.recipe.id,
+    recipeUserId: props.recipe.user_id,
+    currentUserId: props.userId,
+    isOwner: owns,
+  });
+  return owns;
+});
 </script>
 
 <template>
@@ -82,12 +96,14 @@ const navigateToEdit = () => {
           {{ $t("view") }}
         </NuxtLink>
         <button
+          v-if="isOwner"
           @click.prevent.stop="navigateToEdit"
           class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
           {{ $t("edit") }}
         </button>
         <button
+          v-if="isOwner"
           @click="$emit('delete', recipe.id)"
           class="px-3 py-1 bg-red-50 text-red-600 rounded-md text-xs font-medium hover:bg-red-100 transition"
         >

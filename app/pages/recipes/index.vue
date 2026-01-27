@@ -6,12 +6,22 @@ definePageMeta({
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
+// Fetch user ID directly from auth session to avoid SSR timing issues
+const currentUserId = ref<string | undefined>(undefined);
+
+onMounted(async () => {
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
+  currentUserId.value = authUser?.id;
+});
+
 const { data: recipes, refresh } = await useAsyncData("recipes", async () => {
-  const userId = user.value?.id || user.value?.sub;
+  // Remove user_id filter to show public recipes from all users
+  // RLS policies will return: user's own recipes + public recipes from others
   const { data } = await supabase
     .from("recipes")
-    .select("id, title, image_url, recipe_categories(category)")
-    .eq("user_id", userId)
+    .select("id, title, image_url, user_id, recipe_categories(category)")
     .order("created_at", { ascending: false });
   return data || [];
 });
@@ -29,6 +39,10 @@ const groupedRecipes = computed(() => {
       ),
     );
   });
+
+  // Debug: Log user ID to check if it's being set correctly
+  console.log("Recipe index - Current user ID:", user.value?.id);
+
   return groups;
 });
 
@@ -42,7 +56,9 @@ const handleDelete = async (id: string) => {
 <template>
   <div class="space-y-12">
     <div class="flex items-center justify-between">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ $t('recipes') }}</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+        {{ $t("recipes") }}
+      </h1>
       <div class="flex items-center gap-3">
         <NuxtLink
           to="/recipes/ai-generate"
@@ -73,6 +89,7 @@ const handleDelete = async (id: string) => {
             v-for="recipe in groupedRecipes[category]"
             :key="recipe.id"
             :recipe="recipe"
+            :user-id="currentUserId"
             @delete="handleDelete"
           />
         </div>

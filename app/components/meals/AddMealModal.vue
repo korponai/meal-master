@@ -46,11 +46,11 @@ const { data: recipes, refresh } = await useAsyncData(
         break;
     }
 
+    // Remove user_id filter to show public recipes from all users
+    // RLS policies will return: user's own recipes + public recipes from others
     let query = supabase
       .from("recipes")
-      // Start with selecting basic fields
       .select("id, title, image_url, recipe_categories!inner(category)")
-      .eq("user_id", userId)
       .order("title");
 
     // Apply category filter if we have a mapping

@@ -147,8 +147,6 @@ It is intended to be used as **context for AI-assisted development (context engi
 - AI-powered categorization
 - Progress tracking and management
 
-
-
 ### Iteration 10 – Open Recipe from Meal Planner
 
 **Status:** Done
@@ -176,3 +174,17 @@ It is intended to be used as **context for AI-assisted development (context engi
 - `PARTIAL_INGREDIENT_MAP` for partial → whole ingredient conversion
 - Deterministic ingredient merging before AI processing
 - AI now only handles categorization (grouping logic preserved)
+
+### Iteration 12 – Public Recipe Visibility
+
+**Status:** Done  
+**Goal:** Enable public recipes to be visible to all users while maintaining owner-only edit/delete permissions.
+
+**Deliverables:**
+
+- Modified recipe index page to show all accessible recipes (owned + public from others)
+- Updated RecipeCard component with ownership-based permission controls
+- Edit/Delete buttons only visible for recipes owned by current user
+- View button available for all recipes
+- Meal planner modal updated to include public recipes from all users
+- RLS policies already in place handle database-level access control
