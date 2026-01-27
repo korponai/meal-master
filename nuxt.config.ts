@@ -1,20 +1,40 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { z } from "zod";
+
+// Environment variable validation schema
+const envSchema = z.object({
+  CHATGPT_API_KEY: z.string().min(1, "ChatGPT API key is required"),
+  CHATGPT_RECIPE_MODEL: z.string().default("gpt-4o-mini"),
+  CHATGPT_IMAGE_MODEL: z.string().default("dall-e-3"),
+  NUXT_PUBLIC_SUPABASE_URL: z.string().url("Invalid Supabase URL"),
+  NUXT_PUBLIC_SUPABASE_KEY: z
+    .string()
+    .min(1, "Supabase public key is required"),
+  NUXT_PUBLIC_PAYPAL_CLIENT_ID: z.string().optional(),
+  NUXT_PUBLIC_ENABLE_NEW_REGISTRATION: z
+    .string()
+    .optional()
+    .transform((val) => val !== "false"),
+});
+
+// Validate environment variables at build time
+const env = envSchema.parse(process.env);
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   runtimeConfig: {
     // Server-only (not exposed to client)
-    chatgptApiKey: process.env.CHATGPT_API_KEY,
-    chatgptRecipeModel: process.env.CHATGPT_RECIPE_MODEL || "gpt-4o-mini",
-    chatgptImageModel: process.env.CHATGPT_IMAGE_MODEL || "dall-e-3",
+    chatgptApiKey: env.CHATGPT_API_KEY,
+    chatgptRecipeModel: env.CHATGPT_RECIPE_MODEL,
+    chatgptImageModel: env.CHATGPT_IMAGE_MODEL,
     public: {
       supabase: {
-        url: process.env.NUXT_PUBLIC_SUPABASE_URL,
-        key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
+        url: env.NUXT_PUBLIC_SUPABASE_URL,
+        key: env.NUXT_PUBLIC_SUPABASE_KEY,
       },
-      paypalClientId: process.env.NUXT_PUBLIC_PAYPAL_CLIENT_ID,
-      enableNewRegistration:
-        process.env.NUXT_PUBLIC_ENABLE_NEW_REGISTRATION !== "false",
+      paypalClientId: env.NUXT_PUBLIC_PAYPAL_CLIENT_ID,
+      enableNewRegistration: env.NUXT_PUBLIC_ENABLE_NEW_REGISTRATION,
     },
   },
   modules: [

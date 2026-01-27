@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { z } from "zod";
+
 definePageMeta({
   layout: "auth",
 });
@@ -7,6 +9,7 @@ const supabase = useSupabaseClient();
 const { t } = useI18n();
 const config = useRuntimeConfig();
 const allowRegistration = config.public.enableNewRegistration;
+const { showToast } = useToast();
 
 const fullName = ref("");
 const email = ref("");
@@ -15,14 +18,45 @@ const isAgreed = ref(false);
 const isLoading = ref(false);
 const errorMsg = ref("");
 
+// Zod validation schema
+const registerSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name is too long"),
+  email: z.string().email("Invalid email format"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+  isAgreed: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the privacy policy",
+  }),
+});
+
 const handleRegister = async () => {
-  if (!isAgreed.value) {
-    errorMsg.value = t("must_agree_privacy");
+  errorMsg.value = "";
+
+  // Validate with Zod
+  const validation = registerSchema.safeParse({
+    fullName: fullName.value,
+    email: email.value,
+    password: password.value,
+    isAgreed: isAgreed.value,
+  });
+
+  if (!validation.success) {
+    const firstError = validation.error.issues[0];
+    if (firstError) {
+      errorMsg.value = firstError.message;
+      showToast(firstError.message, "error");
+    }
     return;
   }
 
   isLoading.value = true;
-  errorMsg.value = "";
   try {
     const { error } = await supabase.auth.signUp({
       email: email.value,
@@ -34,9 +68,12 @@ const handleRegister = async () => {
       },
     });
     if (error) throw error;
-    alert(t("check_email_confirmation"));
-  } catch (error: any) {
-    errorMsg.value = error.message;
+    showToast(t("check_email_confirmation"), "success");
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Registration failed";
+    errorMsg.value = message;
+    showToast(message, "error");
   } finally {
     isLoading.value = false;
   }

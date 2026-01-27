@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
           {
             role: "system",
             content:
-              "Te egy táplálkozási szakértő asszisztens vagy. A megadott recept és hozzávalók alapján kiszámolod a tápértékadatokat. Mindig pontosan a megadott JSON formátumban válaszolj. Ha egy értéket nem tudsz meghatározni, használj null-t.",
+              "You are a nutrition expert assistant. Based on the given recipe and ingredients, you calculate nutritional values. Always respond in the exact JSON format specified. If you cannot determine a value, use null.",
           },
           {
             role: "user",
@@ -92,9 +92,9 @@ export default defineEventHandler(async (event) => {
     const nutrition: GeneratedNutrition = JSON.parse(content);
 
     return nutrition;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error generating nutrition:", error);
-    if (error.statusCode) {
+    if (typeof error === "object" && error !== null && "statusCode" in error) {
       throw error;
     }
     throw createError({
@@ -113,17 +113,17 @@ function generatePrompt(
     .map((ing) => `- ${ing.quantity} ${ing.unit} ${ing.name}`)
     .join("\n");
 
-  return `Számold ki a következő recept tápértékadatait:
+  return `Calculate the nutritional values for the following recipe:
 
-**Recept neve:** ${recipeTitle}
-**Adag:** ${servingSize} adag
+**Recipe name:** ${recipeTitle}
+**Servings:** ${servingSize} serving(s)
 
-**Hozzávalók:**
+**Ingredients:**
 ${ingredientsList}
 
-**FONTOS:** Számold ki az EGY ADAGRA jutó tápértékeket!
+**IMPORTANT:** Calculate the nutritional values PER SERVING!
 
-**Válaszolj PONTOSAN ebben a JSON formátumban:**
+**Respond in EXACTLY this JSON format:**
 {
   "nutrition": {
     "calories": {
@@ -161,5 +161,5 @@ ${ingredientsList}
   }
 }
 
-Ha egy értéket nem tudsz pontosan meghatározni, használj null-t a value mezőben.`;
+If you cannot determine a value precisely, use null for the value field.`;
 }

@@ -149,5 +149,6 @@ const { openDonationModal } = useDonation();
       </div>
     </footer>
   </div>
+  <Toast />
   <DonationModal />
 </template>

@@ -14,16 +14,18 @@ const isLoading = ref(false);
 
 const uploadImage = async (file: File) => {
   console.log("Upload Image - User Check:", user.value);
-  if (!user.value || !user.value.id) {
+
+  let userId = user.value?.id;
+
+  if (!userId) {
     const {
       data: { user: currentUser },
     } = await supabase.auth.getUser();
-    if (!currentUser || !currentUser.id)
-      throw new Error("User not authenticated properly (missing ID)");
-    // update local ref if needed, but definitely use the ID we found
-    var userId = currentUser.id;
-  } else {
-    var userId = user.value.id;
+    userId = currentUser?.id;
+  }
+
+  if (!userId) {
+    throw new Error("User not authenticated properly (missing ID)");
   }
 
   const fileExt = file.name.split(".").pop();
@@ -74,13 +76,17 @@ const handleSubmit = async (payload: {
       .single();
 
     if (recipeError) throw recipeError;
-    if (!recipe) throw new Error("Failed to create recipe");
+    if (!recipe || !("id" in recipe) || !recipe.id) {
+      throw new Error("Failed to create recipe");
+    }
+
+    const recipeId = recipe.id as string;
 
     // 3. Insert Categories
     if (payload.recipe.categories && payload.recipe.categories.length > 0) {
       const categoriesToInsert = payload.recipe.categories.map(
         (cat: string) => ({
-          recipe_id: recipe.id,
+          recipe_id: recipeId,
           category: cat,
         }),
       );
@@ -94,7 +100,7 @@ const handleSubmit = async (payload: {
 
     // 4. Insert Ingredients
     const ingredientsToInsert = payload.ingredients.map((ing) => ({
-      recipe_id: recipe.id,
+      recipe_id: recipeId,
       ingredient_id: ing.ingredient.id,
       quantity: ing.quantity,
       unit: ing.unit,
