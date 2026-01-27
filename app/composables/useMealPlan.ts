@@ -1,39 +1,71 @@
 import type { Database } from "../types/database.types";
 import type { MealPlan, MealType } from "../types/meal-plan";
 
+/**
+ * Composable for managing meal plans
+ * Provides CRUD operations for user meal planning
+ *
+ * @returns Object with meal plan functions and reactive state
+ */
 export const useMealPlan = () => {
   const supabase = useSupabaseClient<Database>();
   const { getUserId } = useAuth();
 
+  // Reactive state for UI feedback
+  const isLoading = ref(false);
+  const error = ref<string | null>(null);
+
+  /**
+   * Fetch meal plans for a specific date range
+   *
+   * @param startDate - Start date in YYYY-MM-DD format
+   * @param endDate - End date in YYYY-MM-DD format
+   * @returns Array of meal plans with joined recipe data
+   */
   const fetchMealPlans = async (startDate: string, endDate: string) => {
+    isLoading.value = true;
+    error.value = null;
+
     try {
       const userId = getUserId();
 
-      const { data, error } = await supabase
+      const { data, error: fetchError } = await supabase
         .from("meal_plans")
         .select("*, recipes(*)")
         .eq("user_id", userId)
         .gte("date", startDate)
         .lte("date", endDate);
 
-      if (error) {
-        console.error("Error fetching meal plans:", error);
-        throw error;
+      if (fetchError) {
+        error.value = fetchError.message;
+        throw fetchError;
       }
 
       return data as MealPlan[];
-    } catch (error: unknown) {
-      console.error("Error in fetchMealPlans:", error);
+    } catch (err: unknown) {
+      error.value =
+        err instanceof Error ? err.message : "Failed to fetch meal plans";
       return [];
+    } finally {
+      isLoading.value = false;
     }
   };
 
+  /**
+   * Add a new meal to the plan
+   *
+   * @param meal - Meal plan data including date, type, and recipe
+   * @returns Created meal plan with joined recipe data
+   */
   const addMealPlan = async (meal: {
     date: string;
     meal_type: MealType;
     recipe_id: string;
     custom_name?: string;
   }) => {
+    isLoading.value = true;
+    error.value = null;
+
     try {
       const userId = getUserId();
 
@@ -45,19 +77,20 @@ export const useMealPlan = () => {
         custom_name: meal.custom_name || null,
       };
 
-      const { data, error } = await supabase
+      const { data, error: insertError } = await supabase
         .from("meal_plans")
         .insert(payload)
         .select()
         .single();
 
-      if (error) {
-        console.error("Error adding meal plan:", error);
-        throw error;
+      if (insertError) {
+        error.value = insertError.message;
+        throw insertError;
       }
 
       const newMealPlan = data as MealPlan;
 
+      // Re-fetch with joined recipe data
       const { data: refetchedData, error: fetchError } = await supabase
         .from("meal_plans")
         .select("*, recipes(*)")
@@ -65,23 +98,45 @@ export const useMealPlan = () => {
         .single();
 
       if (fetchError) {
-        console.warn("Could not refetch details with join:", fetchError);
+        // Return without recipe join if refetch fails
         return newMealPlan;
       }
 
       return refetchedData as MealPlan;
-    } catch (error: unknown) {
-      console.error("Error in addMealPlan:", error);
-      throw error;
+    } catch (err: unknown) {
+      error.value =
+        err instanceof Error ? err.message : "Failed to add meal plan";
+      throw err;
+    } finally {
+      isLoading.value = false;
     }
   };
 
+  /**
+   * Delete a meal plan by ID
+   *
+   * @param id - Meal plan ID to delete
+   */
   const deleteMealPlan = async (id: string) => {
-    const { error } = await supabase.from("meal_plans").delete().eq("id", id);
+    isLoading.value = true;
+    error.value = null;
 
-    if (error) {
-      console.error("Error deleting meal plan:", error);
-      throw error;
+    try {
+      const { error: deleteError } = await supabase
+        .from("meal_plans")
+        .delete()
+        .eq("id", id);
+
+      if (deleteError) {
+        error.value = deleteError.message;
+        throw deleteError;
+      }
+    } catch (err: unknown) {
+      error.value =
+        err instanceof Error ? err.message : "Failed to delete meal plan";
+      throw err;
+    } finally {
+      isLoading.value = false;
     }
   };
 
@@ -89,5 +144,7 @@ export const useMealPlan = () => {
     fetchMealPlans,
     addMealPlan,
     deleteMealPlan,
+    isLoading: readonly(isLoading),
+    error: readonly(error),
   };
 };

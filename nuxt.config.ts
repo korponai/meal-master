@@ -44,7 +44,16 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@nuxtjs/google-fonts",
     "@vite-pwa/nuxt",
+    "nuxt-csurf",
   ],
+
+  // CSRF Protection Configuration
+  csurf: {
+    https: process.env.NODE_ENV === "production",
+    cookieKey: "__csrf",
+    methodsToProtect: ["POST", "PUT", "PATCH", "DELETE"],
+  },
+
   pwa: {
     registerType: "autoUpdate",
     manifest: {

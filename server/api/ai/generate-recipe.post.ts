@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { AI_CONFIG } from "~/constants/ai";
+import { logger } from "~/utils/logger";
 
 const requestSchema = z.object({
   sensitivities: z.array(z.string()).optional().default([]),
@@ -55,7 +57,7 @@ export default defineEventHandler(async (event) => {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("OpenAI API Error:", error);
+      logger.error("OpenAI API Error", error);
       throw createError({
         statusCode: response.status,
         message: error.error?.message || "OpenAI API error",
@@ -76,7 +78,7 @@ export default defineEventHandler(async (event) => {
 
     return { recipe };
   } catch (error: unknown) {
-    console.error("Error generating recipe:", error);
+    logger.error("Error generating recipe", error);
 
     // Handle H3 errors
     if (typeof error === "object" && error !== null && "statusCode" in error) {
