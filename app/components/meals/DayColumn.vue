@@ -131,7 +131,7 @@ const isOverLimit = computed(() => {
         isOverLimit ? 'bg-red-100 text-red-800' : 'bg-gray-50 text-gray-600'
       "
     >
-      Total: {{ totalCalories }} kcal
+      {{ $t("total") }}: {{ totalCalories }} kcal
     </div>
   </div>
 </template>

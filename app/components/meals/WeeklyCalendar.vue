@@ -31,6 +31,7 @@ const getDateLocale = computed(() => {
 });
 
 // State
+const isMounted = ref(false);
 const currentDate = ref(new Date());
 const weekStart = computed(() =>
   startOfWeek(currentDate.value, { weekStartsOn: 1 }),
@@ -81,6 +82,7 @@ const fetchProfile = async () => {
 };
 
 onMounted(() => {
+  isMounted.value = true;
   if (user.value) {
     loadMeals();
     fetchProfile();
@@ -177,7 +179,7 @@ const generateShoppingList = async () => {
 
         <button
           @click="generateShoppingList"
-          :disabled="generatingList || meals.length === 0"
+          :disabled="!isMounted || generatingList || meals.length === 0"
           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 transition-all shadow-sm"
         >
           <svg
@@ -202,7 +204,7 @@ const generateShoppingList = async () => {
             ></path>
           </svg>
           <span v-else>✨</span>
-          Generate Shopping List
+          {{ $t("generate_shopping_list") }}
         </button>
 
         <div

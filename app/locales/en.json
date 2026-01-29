@@ -255,5 +255,7 @@
   "add_meal_title": "Add Meal",
   "search_recipes_placeholder": "Search recipes...",
   "no_recipes_found": "No recipes found.",
-  "add_meal_button": "Add Meal"
+  "add_meal_button": "Add Meal",
+  "generate_shopping_list": "Generate Shopping List",
+  "total": "Total"
 }

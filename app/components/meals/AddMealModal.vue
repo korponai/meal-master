@@ -17,6 +17,29 @@ const user = useSupabaseUser();
 const searchQuery = ref("");
 const selectedRecipeId = ref<string | null>(null);
 
+const { data: userSensitivities } = await useAsyncData<string[]>(
+  "user-sensitivities",
+  async () => {
+    const userId = user.value?.id || user.value?.sub;
+    if (!userId) return [];
+
+    console.log("Fetching user sensitivities for modal.");
+    const { data } = await supabase
+      .from("profiles")
+      .select("food_sensitivities")
+      .eq("id", userId)
+      .single();
+
+    return (data?.food_sensitivities as string[]) || [];
+  },
+  {
+    watch: [user],
+    server: false,
+    lazy: true,
+    default: () => [],
+  },
+);
+
 const { data: recipes, refresh } = await useAsyncData(
   "recipes-local-list",
   async () => {
@@ -50,7 +73,9 @@ const { data: recipes, refresh } = await useAsyncData(
     // RLS policies will return: user's own recipes + public recipes from others
     let query = supabase
       .from("recipes")
-      .select("id, title, image_url, recipe_categories!inner(category)")
+      .select(
+        "id, title, image_url, allergens, recipe_categories!inner(category)",
+      )
       .order("title");
 
     // Apply category filter if we have a mapping
@@ -212,6 +237,30 @@ const handleClose = () => {
                     .map((rc) => $t(`category_${rc.category.toLowerCase()}`))
                     .join(", ")
                 }}
+              </div>
+              <div
+                v-if="recipe.allergens && recipe.allergens.length > 0"
+                class="flex flex-wrap gap-1 mt-1.5"
+              >
+                <span
+                  v-for="allergen in recipe.allergens"
+                  :key="allergen"
+                  class="text-[10px] px-1.5 py-0.5 rounded-full border"
+                  :class="[
+                    userSensitivities && userSensitivities.includes(allergen)
+                      ? 'bg-red-50 text-red-700 border-red-200 font-medium'
+                      : 'bg-gray-50 text-gray-600 border-gray-200',
+                  ]"
+                >
+                  {{ $t(`sensitivity_${allergen.toLowerCase()}`) }}
+                  <span
+                    v-if="
+                      userSensitivities && userSensitivities.includes(allergen)
+                    "
+                    class="ml-0.5"
+                    >⚠️</span
+                  >
+                </span>
               </div>
             </div>
           </div>

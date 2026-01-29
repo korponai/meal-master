@@ -220,5 +220,7 @@
   "add_meal_title": "Étkezés hozzáadása",
   "search_recipes_placeholder": "Receptek keresése...",
   "no_recipes_found": "Nem található recept.",
-  "add_meal_button": "Hozzáadás"
+  "add_meal_button": "Hozzáadás",
+  "generate_shopping_list": "Bevásárlólista generálása",
+  "total": "Összesen"
 }

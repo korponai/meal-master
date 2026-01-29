@@ -220,5 +220,7 @@
   "add_meal_title": "Dodaj obrok",
   "search_recipes_placeholder": "Pretraži recepte...",
   "no_recipes_found": "Nema pronađenih recepata.",
-  "add_meal_button": "Dodaj obrok"
+  "add_meal_button": "Dodaj obrok",
+  "generate_shopping_list": "Generiši listu za kupovinu",
+  "total": "Ukupno"
 }
