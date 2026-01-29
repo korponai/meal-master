@@ -9,6 +9,7 @@ definePageMeta({
 const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 const router = useRouter();
+const localePath = useLocalePath();
 
 const isLoading = ref(false);
 
@@ -120,7 +121,7 @@ const handleSubmit = async (payload: {
       }
     }
 
-    router.push("/recipes");
+    router.push(localePath("/recipes"));
   } catch (error: any) {
     console.error(error);
     alert(error.message || "An error occurred while creating the recipe");

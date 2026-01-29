@@ -251,5 +251,9 @@
   "privacy_changes_text": "We may update this privacy policy from time to time. We will notify you of any significant changes by posting the new policy on this page.",
   "privacy_contact": "Contact Us",
   "privacy_contact_text": "If you have any questions about this privacy policy or wish to exercise your rights, please contact us through the contact page.",
-  "privacy_last_updated": "Last Updated"
+  "privacy_last_updated": "Last Updated",
+  "add_meal_title": "Add Meal",
+  "search_recipes_placeholder": "Search recipes...",
+  "no_recipes_found": "No recipes found.",
+  "add_meal_button": "Add Meal"
 }

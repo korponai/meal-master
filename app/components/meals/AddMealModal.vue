@@ -137,7 +137,9 @@ const handleClose = () => {
       <div
         class="px-4 py-4 sm:px-6 border-b border-gray-100 flex justify-between items-center"
       >
-        <h3 class="text-lg font-semibold text-gray-900">Add Meal</h3>
+        <h3 class="text-lg font-semibold text-gray-900">
+          {{ $t("add_meal_title") }}
+        </h3>
         <button @click="handleClose" class="text-gray-400 hover:text-gray-500">
           <svg
             class="h-6 w-6"
@@ -161,7 +163,7 @@ const handleClose = () => {
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search recipes..."
+            :placeholder="$t('search_recipes_placeholder')"
             class="w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
           />
         </div>
@@ -186,15 +188,29 @@ const handleClose = () => {
             />
             <div
               v-else
-              class="h-10 w-10 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500"
+              class="h-10 w-10 rounded bg-gray-200 flex items-center justify-center text-gray-400"
             >
-              Img
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
             </div>
             <div class="flex-1">
               <div class="font-medium text-gray-900">{{ recipe.title }}</div>
               <div class="text-xs text-gray-500 mt-0.5">
                 {{
-                  recipe.recipe_categories.map((rc) => rc.category).join(", ")
+                  recipe.recipe_categories
+                    .map((rc) => $t(`category_${rc.category.toLowerCase()}`))
+                    .join(", ")
                 }}
               </div>
             </div>
@@ -204,7 +220,7 @@ const handleClose = () => {
             v-if="filteredRecipes.length === 0"
             class="text-center py-8 text-gray-500"
           >
-            No recipes found.
+            {{ $t("no_recipes_found") }}
           </div>
         </div>
       </div>
@@ -216,13 +232,13 @@ const handleClose = () => {
           :disabled="!selectedRecipeId"
           class="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed sm:ml-3 sm:w-auto"
         >
-          Add Meal
+          {{ $t("add_meal_button") }}
         </button>
         <button
           @click="handleClose"
           class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
         >
-          Cancel
+          {{ $t("cancel") }}
         </button>
       </div>
     </div>

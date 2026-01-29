@@ -16,7 +16,8 @@ const emit = defineEmits<{
 
 const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
-const { t } = useI18n();
+const { t, locale } = useI18n();
+const { csrf } = useCsrf();
 
 // State
 const customFocus = ref("");
@@ -63,9 +64,13 @@ const generateRecipe = async () => {
       recipe: GeneratedRecipe;
     }>("/api/ai/generate-recipe", {
       method: "POST",
+      headers: {
+        "csrf-token": csrf,
+      },
       body: {
         sensitivities: userSensitivities.value,
         customFocus: customFocus.value || undefined,
+        language: locale.value,
       },
     });
 
@@ -96,6 +101,9 @@ const generateImage = async () => {
       "/api/ai/generate-recipe-image",
       {
         method: "POST",
+        headers: {
+          "csrf-token": csrf,
+        },
         body: {
           recipeTitle: generatedRecipe.value.title,
         },

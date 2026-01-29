@@ -10,6 +10,7 @@ const route = useRoute();
 const router = useRouter();
 const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
+const localePath = useLocalePath();
 
 const recipeId = route.params.id as string;
 const isLoading = ref(false);
@@ -162,7 +163,7 @@ const handleSubmit = async (payload: {
       if (insertError) throw insertError;
     }
 
-    router.push("/recipes");
+    router.push(localePath("/recipes"));
   } catch (error: any) {
     console.error(error);
     alert(error.message || "An error occurred while updating the recipe");
@@ -185,7 +186,7 @@ const handleSubmit = async (payload: {
       />
     </div>
     <div v-else class="text-center py-12">
-      <p>{{ $t('loading_text') }}</p>
+      <p>{{ $t("loading_text") }}</p>
     </div>
   </div>
 </template>

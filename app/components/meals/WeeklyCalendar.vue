@@ -15,6 +15,7 @@ import type { MealType, MealPlan } from "../../types/meal-plan";
 import type { Database } from "@/types/database.types";
 
 const { locale, t } = useI18n();
+const { csrf } = useCsrf();
 const { fetchMealPlans, addMealPlan, deleteMealPlan } = useMealPlan();
 const supabase = useSupabaseClient<Database>();
 
@@ -149,6 +150,9 @@ const generateShoppingList = async () => {
 
     await $fetch("/api/ai/generate-weekly-shopping-list", {
       method: "POST",
+      headers: {
+        "csrf-token": csrf,
+      },
       body: { startDate: start, endDate: end },
     });
 

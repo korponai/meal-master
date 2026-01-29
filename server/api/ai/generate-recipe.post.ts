@@ -5,6 +5,7 @@ import { logger } from "~/utils/logger";
 const requestSchema = z.object({
   sensitivities: z.array(z.string()).optional().default([]),
   customFocus: z.string().optional(),
+  language: z.string().optional().default("en"),
 });
 
 interface GeneratedRecipe {
@@ -26,9 +27,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event);
-  const { sensitivities, customFocus } = requestSchema.parse(body);
+  const { sensitivities, customFocus, language } = requestSchema.parse(body);
 
-  const prompt = generatePrompt(sensitivities, customFocus);
+  const prompt = generatePrompt(sensitivities, customFocus, language);
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -92,7 +93,11 @@ export default defineEventHandler(async (event) => {
   }
 });
 
-function generatePrompt(sensitivities: string[], customFocus?: string): string {
+function generatePrompt(
+  sensitivities: string[],
+  customFocus?: string,
+  language: string = "en",
+): string {
   const sensitivityMap: Record<string, string> = {
     lactose: "lactose (dairy products)",
     gluten: "gluten (wheat, barley, rye)",
@@ -105,7 +110,18 @@ function generatePrompt(sensitivities: string[], customFocus?: string): string {
     fructose: "high-fructose foods",
   };
 
+  const languageMap: Record<string, string> = {
+    en: "English",
+    hu: "Hungarian",
+    sr: "Serbian",
+  };
+  const targetLanguage = languageMap[language] || "English";
+
   let prompt = `Generate 1 healthy recipe.
+
+**Language Rules:**
+- The content (Title, Description, Ingredient Names) MUST be in ${targetLanguage}.
+- The JSON keys and enum values (category, unit, allergens) MUST remain in English as specified below.
 
 **Important rules:**
 - Include ALL nutritional considerations
@@ -126,11 +142,11 @@ Please consider this request when generating the recipe. The recipe's theme and 
 
 **Respond in EXACTLY this JSON format:**
 {
-  "title": "Recipe Name",
-  "description": "A detailed 2-3 sentence description of the dish, including cooking method and flavor profile.",
+  "title": "Recipe Name in ${targetLanguage}",
+  "description": "A detailed 2-3 sentence description of the dish in ${targetLanguage}",
   "category": "Lunch",
   "ingredients": [
-    {"name": "Ingredient name", "quantity": 100, "unit": "gram"}
+    {"name": "Ingredient name in ${targetLanguage}", "quantity": 100, "unit": "gram"}
   ],
   "allergens": ["gluten", "egg"]
 }

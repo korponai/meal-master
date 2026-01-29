@@ -67,10 +67,11 @@ const matchingAllergens = computed(() => {
 const handleDelete = async () => {
   if (!confirm("Delete this recipe?")) return;
   await supabase.from("recipes").delete().eq("id", recipeId);
-  navigateTo("/recipes");
+  navigateTo(localePath("/recipes"));
 };
 
 const { t, te } = useI18n();
+const localePath = useLocalePath();
 const getIngredientName = (name: string) => {
   if (!name) return "";
   const key = `ingredient_${name.toLowerCase().replace(/\s+/g, "_")}`;
@@ -169,7 +170,7 @@ const getIngredientName = (name: string) => {
         </div>
         <div class="flex gap-2 shrink-0">
           <NuxtLink
-            :to="`/recipes/${recipe.id}/edit`"
+            :to="localePath(`/recipes/${recipe.id}/edit`)"
             class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50"
             >{{ $t("edit") }}</NuxtLink
           >

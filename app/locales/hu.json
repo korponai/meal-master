@@ -216,5 +216,9 @@
   "nothing_found": "Nincs találat.",
   "creating": "Létrehozás...",
   "create_item": "\"{item}\" létrehozása",
-  "error_creating_ingredient": "Hiba a hozzávaló létrehozásakor: "
+  "error_creating_ingredient": "Hiba a hozzávaló létrehozásakor: ",
+  "add_meal_title": "Étkezés hozzáadása",
+  "search_recipes_placeholder": "Receptek keresése...",
+  "no_recipes_found": "Nem található recept.",
+  "add_meal_button": "Hozzáadás"
 }

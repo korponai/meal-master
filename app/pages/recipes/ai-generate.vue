@@ -66,7 +66,7 @@ definePageMeta({
 interface GeneratedRecipe {
   title: string;
   description: string;
-  category: "Breakfast" | "Lunch" | "Dinner" | "Snack";
+  category: "Breakfast" | "Lunch" | "Dinner" | "Snack" | "Dessert";
   ingredients: { name: string; quantity: number; unit: string }[];
   allergens: string[];
 }
@@ -74,6 +74,8 @@ interface GeneratedRecipe {
 const supabase = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 const router = useRouter();
+const localePath = useLocalePath();
+const { csrf } = useCsrf();
 
 const isLoading = ref(false);
 
@@ -98,6 +100,9 @@ const downloadAndUploadImage = async (
       contentType: string;
     }>("/api/ai/proxy-image", {
       method: "POST",
+      headers: {
+        "csrf-token": csrf,
+      },
       body: { imageUrl },
     });
 
@@ -262,7 +267,7 @@ const handleSave = async (recipe: GeneratedRecipe, imageUrl: string | null) => {
     }
 
     // 6. Navigate to edit page for final adjustments
-    router.push(`/recipes/${savedRecipe.id}/edit`);
+    router.push(localePath(`/recipes/${savedRecipe.id}/edit`));
   } catch (error: any) {
     console.error("Save error:", error);
     alert(error.message || "An error occurred while saving the recipe");
@@ -276,7 +281,7 @@ const handleSave = async (recipe: GeneratedRecipe, imageUrl: string | null) => {
   <div class="max-w-3xl mx-auto py-10 px-4">
     <div class="mb-6">
       <NuxtLink
-        to="/recipes"
+        :to="localePath('/recipes')"
         class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
       >
         ← {{ $t("recipes") }}

@@ -216,5 +216,9 @@
   "nothing_found": "Nije pronađeno.",
   "creating": "Kreiranje...",
   "create_item": "Kreiraj \"{item}\"",
-  "error_creating_ingredient": "Greška pri kreiranju sastojka: "
+  "error_creating_ingredient": "Greška pri kreiranju sastojka: ",
+  "add_meal_title": "Dodaj obrok",
+  "search_recipes_placeholder": "Pretraži recepte...",
+  "no_recipes_found": "Nema pronađenih recepata.",
+  "add_meal_button": "Dodaj obrok"
 }

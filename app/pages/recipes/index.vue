@@ -7,7 +7,9 @@ const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 // Fetch user ID directly from auth session to avoid SSR timing issues
+// Fetch user ID directly from auth session to avoid SSR timing issues
 const currentUserId = ref<string | undefined>(undefined);
+const localePath = useLocalePath();
 
 onMounted(async () => {
   const {
@@ -61,13 +63,13 @@ const handleDelete = async (id: string) => {
       </h1>
       <div class="flex items-center gap-3">
         <NuxtLink
-          to="/recipes/ai-generate"
+          :to="localePath('/recipes/ai-generate')"
           class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
         >
           ✨ {{ $t("ai_generate") }}
         </NuxtLink>
         <NuxtLink
-          to="/recipes/new"
+          :to="localePath('/recipes/new')"
           class="bg-black text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
         >
           + {{ $t("add_recipe") || "Add Recipe" }}

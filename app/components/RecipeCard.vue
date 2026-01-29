@@ -14,11 +14,12 @@ const { t, te } = useI18n();
 
 const emit = defineEmits(["delete"]);
 const router = useRouter();
+const localePath = useLocalePath();
 
 const navigateToEdit = () => {
   console.log("Edit clicked for recipe:", props.recipe.id);
   router
-    .push(`/recipes/${props.recipe.id}/edit`)
+    .push(localePath(`/recipes/${props.recipe.id}/edit`))
     .catch((err) => console.error("Navigation error:", err));
 };
 
@@ -90,7 +91,7 @@ const isOwner = computed(() => {
 
       <div class="mt-auto flex items-center justify-between gap-2">
         <NuxtLink
-          :to="`/recipes/${recipe.id}`"
+          :to="localePath(`/recipes/${recipe.id}`)"
           class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
           {{ $t("view") }}

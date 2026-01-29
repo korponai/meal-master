@@ -6,6 +6,7 @@ import RecipesRecipeIngredientRow from "./RecipeIngredientRow.vue"; // Explicit 
 import { ALL_SENSITIVITIES } from "@/utils/constants";
 
 const { t } = useI18n();
+const { csrf } = useCsrf();
 
 const categories = [
   "Breakfast",
@@ -272,6 +273,9 @@ const generateNutrients = async () => {
       "/api/ai/generate-nutrients",
       {
         method: "POST",
+        headers: {
+          "csrf-token": csrf,
+        },
         body: {
           recipeTitle: form.title,
           ingredients: validIngredients.map((ing) => ({
@@ -313,6 +317,9 @@ const generateImage = async () => {
       "/api/ai/generate-recipe-image",
       {
         method: "POST",
+        headers: {
+          "csrf-token": csrf,
+        },
         body: { recipeTitle: form.title },
       },
     );
@@ -323,6 +330,9 @@ const generateImage = async () => {
       contentType: string;
     }>("/api/ai/proxy-image", {
       method: "POST",
+      headers: {
+        "csrf-token": csrf,
+      },
       body: { imageUrl: generatedUrl },
     });
 
