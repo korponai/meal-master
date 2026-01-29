@@ -137,8 +137,7 @@ const handleDeleteMeal = async (id: string) => {
 };
 
 const generatingList = ref(false);
-const router = useRouter();
-
+const localePath = useLocalePath();
 const generateShoppingList = async () => {
   // Confirm with user that old list will be cleared
   if (!confirm(t("shopping_list_confirm_clear_old"))) {
@@ -150,7 +149,7 @@ const generateShoppingList = async () => {
     const start = format(weekStart.value, "yyyy-MM-dd");
     const end = format(weekEnd.value, "yyyy-MM-dd");
 
-    await $fetch("/api/ai/generate-weekly-shopping-list", {
+    const { error } = await useFetch("/api/ai/generate-weekly-shopping-list", {
       method: "POST",
       headers: {
         "csrf-token": csrf,
@@ -158,7 +157,11 @@ const generateShoppingList = async () => {
       body: { startDate: start, endDate: end },
     });
 
-    await router.push("/meals/shoppinglist");
+    if (error.value) {
+      throw error.value;
+    }
+
+    await navigateTo(localePath("/meals/shoppinglist"));
   } catch (error) {
     console.error("Failed to generate list:", error);
     alert(t("shopping_list_generate_error"));
