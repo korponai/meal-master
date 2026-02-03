@@ -131,7 +131,6 @@ export default defineNuxtConfig({
     devOptions: {
       enabled: true,
       suppressWarnings: true,
-      type: "module",
     },
   },
   css: ["~/assets/css/main.css"],
@@ -146,6 +145,11 @@ export default defineNuxtConfig({
   },
   supabase: {
     redirect: false,
+  },
+  app: {
+    head: {
+      link: [{ rel: "manifest", href: "/manifest.webmanifest" }],
+    },
   },
   i18n: {
     locales: [
